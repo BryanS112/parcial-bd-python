@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proyecto Final de Bases de Datos — TechCore Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-main: #09090B;
+            --bg-card: #111318;
+            --bg-elevated: #18181B;
+            --bg-ide-head: #161B22;
+            --border-subtle: #27272A;
+            --text-primary: #F4F4F5;
+            --text-secondary: #A1A1AA;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, .font-display {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        code, pre, .font-mono, .font-mono-num {
+            font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .tech-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+        }
+
+        .tech-panel {
+            background-color: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+        }
+
+        .ide-window {
+            background-color: #0D1117;
+            border: 1px solid #27272A;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .ide-header {
+            background-color: #161B22;
+            border-bottom: 1px solid #27272A;
+        }
+
+        .ide-body {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            overflow-x: auto;
+            max-height: 430px;
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.65;
+        }
+
+        .ide-gutter {
+            user-select: none;
+            text-align: right;
+            padding: 14px 12px;
+            color: #52525B;
+            background-color: #0B0F14;
+            border-right: 1px solid #1F242C;
+            font-family: 'JetBrains Mono', monospace;
+            font-variant-numeric: tabular-nums;
+            white-space: pre;
+        }
+
+        .ide-code-pre {
+            margin: 0;
+            padding: 14px 16px;
+            background: transparent !important;
+            overflow: visible;
+        }
+
+        .ide-code-pre code.hljs {
+            background: transparent !important;
+            padding: 0 !important;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.65;
+        }
+
+        .mermaid-viewport {
+            background-color: #0B0D12;
+            border: 1px solid #27272A;
+            border-radius: 10px;
+            overflow: auto;
+        }
+
+        .mermaid-stage {
+            transform-origin: top left;
+            transition: transform 150ms ease;
+            min-width: 100%;
+        }
+
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272A;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3F3F46;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Encabezado ejecutivo fijo -->
+    <header class="sticky top-0 z-40 bg-[#09090B]/95 backdrop-blur-md border-b border-[#27272A]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-9 h-9 rounded-lg bg-[#18181B] border border-[#27272A] flex items-center justify-center text-[#38BDF8] shrink-0">
+                    <i data-lucide="cpu" class="w-4 h-4"></i>
+                </div>
+                <div class="min-w-0">
+                    <h1 class="font-display text-base sm:text-lg font-bold text-[#F4F4F5] truncate">
+                        Proyecto Final de Bases de Datos — TechCore Store
+                    </h1>
+                    <p class="text-xs text-[#A1A1AA] truncate">
+                        Auditoría técnica y mapa interactivo de arquitectura, PL/pgSQL, transacciones ACID, seguridad DCL y código fuente real
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#111318] border border-[#27272A] text-xs font-mono-num">
+                    <span id="health-8001" class="inline-flex items-center gap-1.5 text-[#A1A1AA]">
+                        <span class="w-2 h-2 rounded-full bg-zinc-600"></span> :8001
+                    </span>
+                    <span class="text-zinc-700">|</span>
+                    <span id="health-8002" class="inline-flex items-center gap-1.5 text-[#A1A1AA]">
+                        <span class="w-2 h-2 rounded-full bg-zinc-600"></span> :8002
+                    </span>
+                </div>
+
+                <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#10B981] hover:bg-[#059669] text-[#052E16] text-xs font-bold transition-colors">
+                    <span>Abrir App en Vivo (localhost:3000)</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Barra de filtros rápidos -->
+        <div class="border-t border-[#27272A]/80 bg-[#0D0F14]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center gap-2 overflow-x-auto" id="filter-bar">
+                <button type="button" data-filter="all"
+                        class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors">
+                    Todos (12)
+                </button>
+                <button type="button" data-filter="bd-mere"
+                        class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors">
+                    Base de Datos &amp; MERE
+                </button>
+                <button type="button" data-filter="plpgsql"
+                        class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors">
+                    PL/pgSQL (Triggers, Funciones, Vistas)
+                </button>
+                <button type="button" data-filter="backend-dcl"
+                        class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors">
+                    Microservicios, ACID &amp; Seguridad DCL
+                </button>
+                <button type="button" data-filter="docker-cu"
+                        class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors">
+                    Docker &amp; Caso de Uso
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Guía rápida colapsable para los 5 integrantes -->
+        <details class="tech-card overflow-hidden">
+            <summary class="px-5 py-4 cursor-pointer flex items-center justify-between gap-3 hover:bg-[#18181B]/70 transition-colors">
+                <div class="flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-[#18181B] border border-[#27272A] flex items-center justify-center text-[#F59E0B]">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                    </span>
+                    <div>
+                        <h2 class="font-display text-sm font-bold text-[#F4F4F5]">
+                            Guion de Sustentación — 5 Integrantes (10 minutos)
+                        </h2>
+                        <p class="text-xs text-[#A1A1AA]">
+                            Distribución exacta de tarjetas de evidencia y pruebas en vivo sin superposiciones
+                        </p>
+                    </div>
+                </div>
+                <span class="text-xs font-mono-num text-[#38BDF8] inline-flex items-center gap-1">
+                    <span>Expandir / Ocultar</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </span>
+            </summary>
+
+            <div class="px-5 pb-5 pt-2 border-t border-[#27272A] grid grid-cols-1 md:grid-cols-5 gap-3">
+                <div class="tech-panel p-3.5 space-y-1.5">
+                    <span class="text-[11px] font-mono-num font-semibold text-[#38BDF8]">Bloque 1 &middot; 0:00–2:00</span>
+                    <p class="text-xs font-bold text-[#F4F4F5]">Brayan Steveen Sandoval Quiroz</p>
+                    <p class="text-[11px] font-semibold text-[#CBD5E1]">Contexto TechCore Store, Infraestructura Docker, Modelo MERE y CRUD de Inventario</p>
+                    <p class="text-[11px] text-[#A1A1AA] leading-relaxed">
+                        En pantalla muestra la <strong>Tarjeta 01</strong> (diagrama MERE con controles <em>+</em> / <em>-</em> / <em>Reset</em>, especializaciones e índices), <strong>Tarjeta 02</strong> (<code>docker-compose.yml</code> y red <code>techcore_net</code>) y <strong>Tarjeta 11</strong> (CRUD). Para la prueba en vivo pulsa <strong>"Abrir App en Vivo (localhost:3000)"</strong> arriba o <strong>"Probar en Vivo"</strong> en <em>3. Inventario &amp; Clientes</em> (Tarjeta 12), entra a <em>Inventario y Categorías</em>, crea el producto <code>PROD-DEMO</code> y edita su stock.
+                    </p>
+                </div>
+                <div class="tech-panel p-3.5 space-y-1.5">
+                    <span class="text-[11px] font-mono-num font-semibold text-[#F59E0B]">Bloque 2 &middot; 2:00–4:00</span>
+                    <p class="text-xs font-bold text-[#F4F4F5]">Yoinner Jesus Gandara Garcia</p>
+                    <p class="text-[11px] font-semibold text-[#CBD5E1]">Caso de Uso (CU-01) y Control Transaccional ACID (BEGIN / COMMIT / ROLLBACK)</p>
+                    <p class="text-[11px] text-[#A1A1AA] leading-relaxed">
+                        Muestra la <strong>Tarjeta 10</strong> (<code>CU-01</code>) y la <strong>Tarjeta 07</strong> (código <code>BEGIN / COMMIT / ROLLBACK</code>), pulsando <strong>"Ver flujo con Fallo en 2do ítem (ROLLBACK)"</strong> y <strong>"Ver flujo con Stock OK (COMMIT)"</strong>. En vivo pulsa <strong>"Probar en Vivo"</strong> en <em>2. POS y Demo ROLLBACK</em> (Tarjeta 12), entra a <em>Punto de Venta (POS)</em>, presiona <strong>"Simular fallo en 2do ítem para probar ROLLBACK"</strong> para verificar el stock intacto y luego confirma un lote válido (<code>COMMIT</code>).
+                    </p>
+                </div>
+                <div class="tech-panel p-3.5 space-y-1.5">
+                    <span class="text-[11px] font-mono-num font-semibold text-[#10B981]">Bloque 3 &middot; 4:00–6:00</span>
+                    <p class="text-xs font-bold text-[#F4F4F5]">Juan Camilo Diaz Granados Amaya</p>
+                    <p class="text-[11px] font-semibold text-[#CBD5E1]">Funciones PL/pgSQL, Procedimientos Almacenados (CALL) y Vistas con JOIN</p>
+                    <p class="text-[11px] text-[#A1A1AA] leading-relaxed">
+                        Recorre la <strong>Tarjeta 04</strong> (pestañas <code>fn_calcular_descuento</code>, <code>fn_reporte_ventas</code> y <code>fn_promedio_ponderado</code>), la <strong>Tarjeta 05</strong> (<code>proc_registrar_pedido</code> y <code>proc_cancelar_pedido</code>) y la <strong>Tarjeta 06</strong> (vistas <code>vw_*</code>). En vivo pulsa <strong>"Probar en Vivo"</strong> en <em>1. Dashboard y Reportes</em> (Tarjeta 12) para mostrar el KPI ponderado y filtros por fecha; luego en <em>Punto de Venta (POS)</em> pulsa <strong>"Cancelar"</strong> sobre un pedido para ejecutar <code>CALL proc_cancelar_pedido</code> y devolver stock.
+                    </p>
+                </div>
+                <div class="tech-panel p-3.5 space-y-1.5">
+                    <span class="text-[11px] font-mono-num font-semibold text-[#38BDF8]">Bloque 4 &middot; 6:00–8:00</span>
+                    <p class="text-xs font-bold text-[#F4F4F5]">Ana Catalina Torres Oñate</p>
+                    <p class="text-[11px] font-semibold text-[#CBD5E1]">Triggers de Auditoría Automática y Logs en Vivo</p>
+                    <p class="text-[11px] text-[#A1A1AA] leading-relaxed">
+                        Explica la <strong>Tarjeta 03</strong> (<code>fn_auditar_cambios()</code> con <code>SECURITY DEFINER</code>, protección de <code>password_hash</code> y los 5 triggers <code>trg_auditoria_*</code>) y la <strong>Tarjeta 12</strong>. Para la prueba en vivo pulsa <strong>"Probar en Vivo"</strong> en <em>4. Auditoría en Vivo (Logs)</em> (Tarjeta 12), cambia arriba a <code>rol_admin</code>, filtra por tabla u operación y abre el JSON <code>datos_anteriores</code> / <code>datos_nuevos</code> de los cambios recién ejecutados.
+                    </p>
+                </div>
+                <div class="tech-panel p-3.5 space-y-1.5">
+                    <span class="text-[11px] font-mono-num font-semibold text-[#F59E0B]">Bloque 5 &middot; 8:00–10:00</span>
+                    <p class="text-xs font-bold text-[#F4F4F5]">Manuel Alfredo Gonzalez Castaño</p>
+                    <p class="text-[11px] font-semibold text-[#CBD5E1]">Microservicios (8001 / 8002) y Seguridad DCL (GRANT / REVOKE y bloqueo 403)</p>
+                    <p class="text-[11px] text-[#A1A1AA] leading-relaxed">
+                        Presenta la <strong>Tarjeta 09</strong> (arquitectura por capas <code>:8001</code> y <code>:8002</code> e indicadores de salud arriba) y la <strong>Tarjeta 08</strong> (<code>GRANT</code> / <code>REVOKE</code>, <code>SET ROLE</code> y captura de <code>InsufficientPrivilege</code>). En vivo pulsa <strong>"Abrir App en Vivo (localhost:3000)"</strong>, elige <code>rol_operador</code> en la barra superior, intenta pulsar <strong>"Eliminar"</strong> en <em>Inventario</em> o abrir <em>Auditoría en Vivo</em> para disparar el modal rojo <code>HTTP 403 Forbidden</code>, y cierra pulsando <strong>"Cambiar a rol_admin"</strong>.
+                    </p>
+                </div>
+            </div>
+        </details>
+
+        <!-- GRID DE 12 TARJETAS DE CUMPLIMIENTO -->
+        <div id="cards-grid" class="space-y-6">
+
+            <!-- 01. MERE -->
+            <article class="req-card tech-card p-6 space-y-5" data-category="bd-mere">
+                <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#27272A] pb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono-num text-xs font-bold px-2 py-0.5 rounded bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/30">01</span>
+                            <span class="text-xs font-mono-num text-[#A1A1AA]">docs/MERE.md &middot; database/init.sql</span>
+                        </div>
+                        <h2 class="font-display text-lg font-bold text-[#F4F4F5]">
+                            Modelo Entidad-Relación Extendido (MERE) e Índices Secundarios
+                        </h2>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30">
+                        <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Verificado (7 Tablas, 8 Índices)
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    <div class="tech-panel p-3.5 space-y-1">
+                        <p class="font-semibold text-[#38BDF8] inline-flex items-center gap-1.5">
+                            <i data-lucide="git-fork" class="w-3.5 h-3.5"></i> Especialización Disjunta Total
+                        </p>
+                        <p class="text-[#A1A1AA]">
+                            <code>USUARIOS</code> (<code>rol IN ('rol_admin','rol_operador')</code>) y <code>CLIENTES</code> (<code>tipo_cliente IN ('NATURAL','JURIDICA')</code>).
+                        </p>
+                    </div>
+                    <div class="tech-panel p-3.5 space-y-1">
+                        <p class="font-semibold text-[#10B981] inline-flex items-center gap-1.5">
+                            <i data-lucide="layers" class="w-3.5 h-3.5"></i> Normalización N:M
+                        </p>
+                        <p class="text-[#A1A1AA]">
+                            Tabla asociativa <code>detalle_pedidos</code> (<code>ON DELETE CASCADE</code> desde <code>pedidos</code>, <code>ON DELETE RESTRICT</code> hacia <code>productos</code>).
+                        </p>
+                    </div>
+                    <div class="tech-panel p-3.5 space-y-1">
+                        <p class="font-semibold text-[#F59E0B] inline-flex items-center gap-1.5">
+                            <i data-lucide="shield" class="w-3.5 h-3.5"></i> Integridad y Auditoría
+                        </p>
+                        <p class="text-[#A1A1AA]">
+                            Restricciones <code>CHECK</code> de stock/precios no negativos, <code>UNIQUE</code> en SKUs/documentos/emails y bitácora desacoplada <code>auditoria_logs</code>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Visor Mermaid ER con zoom interactivo -->
+                <div class="space-y-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <span class="text-xs font-semibold text-[#A1A1AA] inline-flex items-center gap-1.5">
+                            <i data-lucide="database" class="w-3.5 h-3.5 text-[#38BDF8]"></i>
+                            Diagrama erDiagram real (docs/MERE.md &middot; Líneas 12–87)
+                        </span>
+                        <div class="inline-flex items-center gap-1 bg-[#18181B] border border-[#27272A] rounded-lg p-1 text-xs font-mono-num">
+                            <button type="button" data-zoom-action="out" class="px-2 py-1 rounded hover:bg-[#27272A] text-[#F4F4F5]" title="Alejar">-</button>
+                            <span id="mere-zoom-label" class="px-2 text-[#A1A1AA]">100%</span>
+                            <button type="button" data-zoom-action="in" class="px-2 py-1 rounded hover:bg-[#27272A] text-[#F4F4F5]" title="Acercar">+</button>
+                            <button type="button" data-zoom-action="reset" class="px-2 py-1 rounded hover:bg-[#27272A] text-[#38BDF8]">Reset</button>
+                        </div>
+                    </div>
+                    <div class="mermaid-viewport p-4 max-h-[460px]">
+                        <div id="mere-zoom-stage" class="mermaid-stage">
+                            <div class="mermaid">
+erDiagram
+    CATEGORIAS ||--o{ PRODUCTOS : "clasifica (0..N)"
+    USUARIOS ||--o{ PEDIDOS : "gestiona (0..N)"
+    CLIENTES ||--o{ PEDIDOS : "realiza (0..N)"
+    PRODUCTOS ||--o{ PEDIDOS : "referencia_cabecera (0..N)"
+    PEDIDOS ||--|{ DETALLE_PEDIDOS : "contiene (1..N)"
+    PRODUCTOS ||--o{ DETALLE_PEDIDOS : "incluye_linea (0..N)"
+
+    CATEGORIAS {
+        serial id PK
+        varchar nombre UK
+        text descripcion
+        boolean activo
+        timestamp creado_en
+    }
+
+    USUARIOS {
+        serial id PK
+        varchar nombre
+        varchar email UK
+        varchar password_hash
+        varchar rol "CHECK: rol_admin | rol_operador"
+        boolean activo
+        timestamp creado_en
+    }
+
+    CLIENTES {
+        serial id PK
+        varchar tipo_cliente "CHECK: NATURAL | JURIDICA"
+        varchar documento UK
+        varchar nombre_razon_social
+        varchar email
+        varchar telefono
+        timestamp creado_en
+    }
+
+    PRODUCTOS {
+        serial id PK
+        varchar codigo UK
+        varchar nombre
+        numeric precio_unitario "CHECK >= 0"
+        integer stock "CHECK >= 0"
+        integer categoria_id FK "NULLABLE"
+        timestamp creado_en
+    }
+
+    PEDIDOS {
+        serial id PK
+        integer usuario_id FK
+        integer producto_id FK
+        integer cliente_id FK "NULLABLE"
+        integer cantidad "CHECK > 0"
+        numeric subtotal "CHECK >= 0"
+        numeric descuento "CHECK >= 0"
+        numeric total "CHECK >= 0"
+        varchar estado
+        timestamp fecha_pedido
+    }
+
+    DETALLE_PEDIDOS {
+        serial id PK
+        integer pedido_id FK
+        integer producto_id FK
+        integer cantidad "CHECK > 0"
+        numeric precio_unitario "CHECK >= 0"
+        numeric subtotal_linea "CHECK >= 0"
+    }
+
+    AUDITORIA_LOGS {
+        serial id PK
+        varchar tabla_afectada
+        varchar operacion
+        varchar usuario_db
+        text detalle
+        timestamp fecha_evento
+    }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 89–111" data-start="89" data-lang="sql">
+                    <script type="text/plain">CREATE INDEX IF NOT EXISTS idx_productos_categoria_id
+    ON productos(categoria_id);
+
+CREATE INDEX IF NOT EXISTS idx_pedidos_usuario_id
+    ON pedidos(usuario_id);
+
+CREATE INDEX IF NOT EXISTS idx_pedidos_producto_id
+    ON pedidos(producto_id);
+
+CREATE INDEX IF NOT EXISTS idx_pedidos_cliente_id
+    ON pedidos(cliente_id);
+
+CREATE INDEX IF NOT EXISTS idx_pedidos_fecha_pedido
+    ON pedidos(fecha_pedido);
+
+CREATE INDEX IF NOT EXISTS idx_detalle_pedidos_pedido_id
+    ON detalle_pedidos(pedido_id);
+
+CREATE INDEX IF NOT EXISTS idx_detalle_pedidos_producto_id
+    ON detalle_pedidos(producto_id);
+
+CREATE INDEX IF NOT EXISTS idx_auditoria_logs_tabla_fecha
+    ON auditoria_logs(tabla_afectada, fecha_evento);</script>
+                </div>
+            </article>
+
+            <!-- 02. DOCKER -->
+            <article class="req-card tech-card p-6 space-y-5" data-category="docker-cu">
+                <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#27272A] pb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono-num text-xs font-bold px-2 py-0.5 rounded bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/30">02</span>
+                            <span class="text-xs font-mono-num text-[#A1A1AA]">docker-compose.yml &middot; Red techcore_net</span>
+                        </div>
+                        <h2 class="font-display text-lg font-bold text-[#F4F4F5]">
+                            Orquestación 100% Offline con Docker Compose (PostgreSQL + Microservicios + Frontend)
+                        </h2>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30">
+                        <i data-lucide="box" class="w-3.5 h-3.5"></i> 4 Contenedores &middot; Red Bridge
+                    </span>
+                </div>
+
+                <div class="mermaid-viewport p-4">
+                    <div class="mermaid">
+flowchart LR
+    B["Navegador Web"] -->|":3000 HTTP"| FE["frontend (nginx:alpine)"]
+    B -->|"fetch + X-DB-Role :8001"| MS1["ms-usuarios-seguridad (FastAPI)"]
+    B -->|"fetch + X-DB-Role :8002"| MS2["ms-operaciones-reportes (FastAPI)"]
+    MS1 -->|"techcore_net :5432"| PG[("postgres_db (postgres:16-alpine)")]
+    MS2 -->|"techcore_net :5432"| PG
+                    </div>
+                </div>
+
+                <div class="code-slot" data-file="docker-compose.yml" data-lines="Líneas 1–78" data-start="1" data-lang="yaml">
+                    <script type="text/plain">services:
+  postgres_db:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: techcore_db
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d techcore_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - techcore_net
+
+  ms-usuarios-seguridad:
+    build:
+      context: ./ms-usuarios-seguridad
+      dockerfile: Dockerfile
+    container_name: ms-usuarios-seguridad
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      # Conexión local 100% offline dentro de Docker; para usar Supabase cambia a tu URL y DB_SSLMODE=require
+      DATABASE_URL: postgresql://postgres:postgres@postgres_db:5432/techcore_db
+      DB_SSLMODE: disable
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    networks:
+      - techcore_net
+
+  ms-operaciones-reportes:
+    build:
+      context: ./ms-operaciones-reportes
+      dockerfile: Dockerfile
+    container_name: ms-operaciones-reportes
+    restart: unless-stopped
+    ports:
+      - "8002:8002"
+    environment:
+      # Conexión local 100% offline dentro de Docker; para usar Supabase cambia a tu URL y DB_SSLMODE=require
+      DATABASE_URL: postgresql://postgres:postgres@postgres_db:5432/techcore_db
+      DB_SSLMODE: disable
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    networks:
+      - techcore_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: techcore_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - ms-usuarios-seguridad
+      - ms-operaciones-reportes
+    networks:
+      - techcore_net
+
+volumes:
+  postgres_data:
+
+networks:
+  techcore_net:
+    driver: bridge</script>
+                </div>
+            </article>
+
+            <!-- 03. TRIGGERS DE AUDITORÍA -->
+            <article class="req-card tech-card p-6 space-y-5" data-category="plpgsql">
+                <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#27272A] pb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono-num text-xs font-bold px-2 py-0.5 rounded bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/30">03</span>
+                            <span class="text-xs font-mono-num text-[#A1A1AA]">database/init.sql &middot; Líneas 360–423</span>
+                        </div>
+                        <h2 class="font-display text-lg font-bold text-[#F4F4F5]">
+                            Triggers de Auditoría Automática y Desacoplamiento (<code>SECURITY DEFINER</code>)
+                        </h2>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30">
+                        <i data-lucide="activity" class="w-3.5 h-3.5"></i> 5 Triggers Activos
+                    </span>
+                </div>
+
+                <p class="text-[13px] text-[#A1A1AA] leading-relaxed">
+                    La auditoría está completamente desacoplada del backend: la función trigger <code>fn_auditar_cambios()</code> se ejecuta con privilegios <code>SECURITY DEFINER</code> (permitiendo escribir en <code>auditoria_logs</code> aunque el operador no tenga acceso directo a la tabla), captura el rol real de sesión mediante <code>current_setting('role', true)</code>, serializa los estados <code>OLD</code> y <code>NEW</code> en JSONB y omite el campo <code>password_hash</code> cuando la tabla auditada es <code>usuarios</code>.
+                </p>
+
+                <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 360–423" data-start="360" data-lang="sql">
+                    <script type="text/plain">CREATE OR REPLACE FUNCTION fn_auditar_cambios()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_rol_activo TEXT;
+    v_old JSONB := NULL;
+    v_new JSONB := NULL;
+    v_detalle TEXT;
+BEGIN
+    v_rol_activo := COALESCE(NULLIF(current_setting('role', true), 'none'), CURRENT_USER);
+
+    IF TG_OP IN ('UPDATE', 'DELETE') THEN
+        v_old := to_jsonb(OLD);
+        IF TG_TABLE_NAME = 'usuarios' THEN
+            v_old := v_old - 'password_hash';
+        END IF;
+    END IF;
+
+    IF TG_OP IN ('INSERT', 'UPDATE') THEN
+        v_new := to_jsonb(NEW);
+        IF TG_TABLE_NAME = 'usuarios' THEN
+            v_new := v_new - 'password_hash';
+        END IF;
+    END IF;
+
+    v_detalle := jsonb_build_object(
+        'old', v_old,
+        'new', v_new
+    )::TEXT;
+
+    INSERT INTO auditoria_logs (tabla_afectada, operacion, usuario_db, detalle)
+    VALUES (TG_TABLE_NAME, TG_OP, v_rol_activo, v_detalle);
+
+    RETURN COALESCE(NEW, OLD);
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_auditoria_usuarios ON usuarios;
+CREATE TRIGGER trg_auditoria_usuarios
+    AFTER INSERT OR UPDATE OR DELETE ON usuarios
+    FOR EACH ROW EXECUTE FUNCTION fn_auditar_cambios();
+
+DROP TRIGGER IF EXISTS trg_auditoria_productos ON productos;
+CREATE TRIGGER trg_auditoria_productos
+    AFTER INSERT OR UPDATE OR DELETE ON productos
+    FOR EACH ROW EXECUTE FUNCTION fn_auditar_cambios();
+
+DROP TRIGGER IF EXISTS trg_auditoria_clientes ON clientes;
+CREATE TRIGGER trg_auditoria_clientes
+    AFTER INSERT OR UPDATE OR DELETE ON clientes
+    FOR EACH ROW EXECUTE FUNCTION fn_auditar_cambios();
+
+DROP TRIGGER IF EXISTS trg_auditoria_pedidos ON pedidos;
+CREATE TRIGGER trg_auditoria_pedidos
+    AFTER INSERT OR UPDATE OR DELETE ON pedidos
+    FOR EACH ROW EXECUTE FUNCTION fn_auditar_cambios();
+
+DROP TRIGGER IF EXISTS trg_auditoria_detalle_pedidos ON detalle_pedidos;
+CREATE TRIGGER trg_auditoria_detalle_pedidos
+    AFTER INSERT OR UPDATE OR DELETE ON detalle_pedidos
+    FOR EACH ROW EXECUTE FUNCTION fn_auditar_cambios();</script>
+                </div>
+            </article>
+
+            <!-- 04. FUNCIONES PL/pgSQL -->
+            <article class="req-card tech-card p-6 space-y-5" data-category="plpgsql">
+                <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#27272A] pb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono-num text-xs font-bold px-2 py-0.5 rounded bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/30">04</span>
+                            <span class="text-xs font-mono-num text-[#A1A1AA]">database/init.sql &middot; Escalar, Tabular y Agregada</span>
+                        </div>
+                        <h2 class="font-display text-lg font-bold text-[#F4F4F5]">
+                            Funciones PL/pgSQL (Escalar, <code>RETURNS TABLE</code> y <code>CREATE AGGREGATE</code>)
+                        </h2>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30">
+                        <i data-lucide="function-square" class="w-3.5 h-3.5"></i> 3 Tipos Cubiertos
+                    </span>
+                </div>
+
+                <!-- Pestañas internas -->
+                <div class="inner-tabs-group space-y-4">
+                    <div class="flex flex-wrap gap-2">
+                        <button type="button" data-inner-tab="fn-escalar" class="inner-tab-btn px-3 py-1.5 rounded-lg text-xs font-mono-num font-semibold">
+                            fn_calcular_descuento (Escalar)
+                        </button>
+                        <button type="button" data-inner-tab="fn-tabla" class="inner-tab-btn px-3 py-1.5 rounded-lg text-xs font-mono-num font-semibold">
+                            fn_reporte_ventas (Tabla)
+                        </button>
+                        <button type="button" data-inner-tab="fn-agg" class="inner-tab-btn px-3 py-1.5 rounded-lg text-xs font-mono-num font-semibold">
+                            fn_promedio_ponderado (Agregación)
+                        </button>
+                    </div>
+
+                    <div data-inner-panel="fn-escalar" class="inner-tab-panel">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 117–141" data-start="117" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE FUNCTION fn_calcular_descuento(
+    p_subtotal NUMERIC,
+    p_cantidad INTEGER
+)
+RETURNS NUMERIC
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_porcentaje NUMERIC := 0.00;
+BEGIN
+    IF p_subtotal IS NULL OR p_subtotal <= 0 OR p_cantidad IS NULL OR p_cantidad <= 0 THEN
+        RETURN 0.00;
+    END IF;
+
+    IF p_cantidad >= 10 THEN
+        v_porcentaje := 0.10;
+    ELSIF p_cantidad >= 5 THEN
+        v_porcentaje := 0.05;
+    ELSE
+        v_porcentaje := 0.00;
+    END IF;
+
+    RETURN ROUND(p_subtotal * v_porcentaje, 2);
+END;
+$$;</script>
+                        </div>
+                    </div>
+
+                    <div data-inner-panel="fn-tabla" class="inner-tab-panel hidden">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 273–311" data-start="273" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE FUNCTION fn_reporte_ventas(
+    p_fecha_inicio TIMESTAMP DEFAULT NULL,
+    p_fecha_fin TIMESTAMP DEFAULT NULL
+)
+RETURNS TABLE (
+    pedido_id INTEGER,
+    cliente_nombre VARCHAR,
+    producto_codigo VARCHAR,
+    producto_nombre VARCHAR,
+    cantidad INTEGER,
+    subtotal NUMERIC,
+    descuento NUMERIC,
+    total NUMERIC,
+    estado VARCHAR,
+    fecha_pedido TIMESTAMP
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        pe.id AS pedido_id,
+        u.nombre AS cliente_nombre,
+        pr.codigo AS producto_codigo,
+        pr.nombre AS producto_nombre,
+        pe.cantidad,
+        pe.subtotal,
+        pe.descuento,
+        pe.total,
+        pe.estado,
+        pe.fecha_pedido
+    FROM pedidos pe
+    INNER JOIN usuarios u ON u.id = pe.usuario_id
+    INNER JOIN productos pr ON pr.id = pe.producto_id
+    WHERE (p_fecha_inicio IS NULL OR pe.fecha_pedido >= p_fecha_inicio)
+      AND (p_fecha_fin IS NULL OR pe.fecha_pedido <= p_fecha_fin)
+    ORDER BY pe.fecha_pedido DESC, pe.id DESC;
+END;
+$$;</script>
+                        </div>
+                    </div>
+
+                    <div data-inner-panel="fn-agg" class="inner-tab-panel hidden">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 314–355" data-start="314" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE FUNCTION fn_promedio_ponderado_sfunc(
+    p_estado NUMERIC[],
+    p_valor NUMERIC,
+    p_peso NUMERIC
+)
+RETURNS NUMERIC[]
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF p_valor IS NULL OR p_peso IS NULL OR p_peso <= 0 THEN
+        RETURN p_estado;
+    END IF;
+
+    RETURN ARRAY[
+        p_estado[1] + (p_valor * p_peso),
+        p_estado[2] + p_peso
+    ];
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION fn_promedio_ponderado_ffunc(
+    p_estado NUMERIC[]
+)
+RETURNS NUMERIC
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF p_estado IS NULL OR p_estado[2] IS NULL OR p_estado[2] = 0 THEN
+        RETURN 0.00;
+    END IF;
+
+    RETURN ROUND(p_estado[1] / p_estado[2], 2);
+END;
+$$;
+
+DROP AGGREGATE IF EXISTS fn_promedio_ponderado(NUMERIC, NUMERIC);
+CREATE AGGREGATE fn_promedio_ponderado(NUMERIC, NUMERIC) (
+    SFUNC = fn_promedio_ponderado_sfunc,
+    STYPE = NUMERIC[],
+    FINALFUNC = fn_promedio_ponderado_ffunc,
+    INITCOND = '{0,0}'
+);</script>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 05. PROCEDIMIENTOS ALMACENADOS -->
+            <article class="req-card tech-card p-6 space-y-5" data-category="plpgsql">
+                <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#27272A] pb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono-num text-xs font-bold px-2 py-0.5 rounded bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30">05</span>
+                            <span class="text-xs font-mono-num text-[#A1A1AA]">database/init.sql &middot; CALL + FOR UPDATE</span>
+                        </div>
+                        <h2 class="font-display text-lg font-bold text-[#F4F4F5]">
+                            Procedimientos Almacenados (<code>proc_registrar_pedido</code> y <code>proc_cancelar_pedido</code>)
+                        </h2>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30">
+                        <i data-lucide="terminal" class="w-3.5 h-3.5"></i> Bloqueo Pesimista FOR UPDATE
+                    </span>
+                </div>
+
+                <div class="inner-tabs-group space-y-4">
+                    <div class="flex flex-wrap gap-2">
+                        <button type="button" data-inner-tab="proc-reg" class="inner-tab-btn px-3 py-1.5 rounded-lg text-xs font-mono-num font-semibold">
+                            proc_registrar_pedido (L145–L208)
+                        </button>
+                        <button type="button" data-inner-tab="proc-canc" class="inner-tab-btn px-3 py-1.5 rounded-lg text-xs font-mono-num font-semibold">
+                            proc_cancelar_pedido (L211–L270)
+                        </button>
+                    </div>
+
+                    <div data-inner-panel="proc-reg" class="inner-tab-panel">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 145–208" data-start="145" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE PROCEDURE proc_registrar_pedido(
+    IN p_usuario_id INTEGER,
+    IN p_producto_id INTEGER,
+    IN p_cantidad INTEGER,
+    INOUT p_pedido_id INTEGER DEFAULT NULL,
+    INOUT p_mensaje TEXT DEFAULT NULL
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_precio NUMERIC(12, 2);
+    v_stock_actual INTEGER;
+    v_usuario_existe BOOLEAN;
+    v_subtotal NUMERIC(12, 2);
+    v_descuento NUMERIC(12, 2);
+    v_total NUMERIC(12, 2);
+BEGIN
+    IF p_cantidad IS NULL OR p_cantidad <= 0 THEN
+        RAISE EXCEPTION 'La cantidad del pedido debe ser mayor a cero.';
+    END IF;
+
+    SELECT EXISTS(SELECT 1 FROM usuarios WHERE id = p_usuario_id AND activo = TRUE)
+      INTO v_usuario_existe;
+
+    IF NOT v_usuario_existe THEN
+        RAISE EXCEPTION 'El usuario % no existe o se encuentra inactivo.', p_usuario_id;
+    END IF;
+
+    SELECT precio_unitario, stock
+      INTO v_precio, v_stock_actual
+      FROM productos
+     WHERE id = p_producto_id
+       FOR UPDATE;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'El producto % no existe.', p_producto_id;
+    END IF;
+
+    IF v_stock_actual < p_cantidad THEN
+        RAISE EXCEPTION 'Stock insuficiente para el producto % (disponible: %, solicitado: %).',
+            p_producto_id, v_stock_actual, p_cantidad;
+    END IF;
+
+    v_subtotal := ROUND(v_precio * p_cantidad, 2);
+    v_descuento := fn_calcular_descuento(v_subtotal, p_cantidad);
+    v_total := ROUND(v_subtotal - v_descuento, 2);
+
+    UPDATE productos
+       SET stock = stock - p_cantidad
+     WHERE id = p_producto_id;
+
+    INSERT INTO pedidos (usuario_id, producto_id, cantidad, subtotal, descuento, total, estado)
+    VALUES (p_usuario_id, p_producto_id, p_cantidad, v_subtotal, v_descuento, v_total, 'CONFIRMADO')
+    RETURNING id INTO p_pedido_id;
+
+    INSERT INTO detalle_pedidos (pedido_id, producto_id, cantidad, precio_unitario, subtotal_linea)
+    VALUES (p_pedido_id, p_producto_id, p_cantidad, v_precio, v_subtotal);
+
+    p_mensaje := FORMAT('Pedido #%s registrado correctamente. Total: %s (descuento: %s)',
+                        p_pedido_id, v_total, v_descuento);
+END;
+$$;</script>
+                        </div>
+                    </div>
+
+                    <div data-inner-panel="proc-canc" class="inner-tab-panel hidden">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 211–270" data-start="211" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE PROCEDURE proc_cancelar_pedido(
+    IN p_pedido_id INTEGER,
+    INOUT p_mensaje TEXT DEFAULT NULL
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_estado VARCHAR(30);
+    v_producto_id INTEGER;
+    v_cantidad INTEGER;
+    v_total_devuelto INTEGER := 0;
+    v_tiene_detalle BOOLEAN := FALSE;
+    v_linea RECORD;
+BEGIN
+    SELECT estado, producto_id, cantidad
+      INTO v_estado, v_producto_id, v_cantidad
+      FROM pedidos
+     WHERE id = p_pedido_id
+       FOR UPDATE;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'El pedido % no existe.', p_pedido_id;
+    END IF;
+
+    IF UPPER(v_estado) = 'CANCELADO' THEN
+        RAISE EXCEPTION 'El pedido % ya se encuentra cancelado.', p_pedido_id;
+    END IF;
+
+    UPDATE pedidos
+       SET estado = 'CANCELADO'
+     WHERE id = p_pedido_id;
+
+    FOR v_linea IN
+        SELECT producto_id, cantidad
+          FROM detalle_pedidos
+         WHERE pedido_id = p_pedido_id
+    LOOP
+        v_tiene_detalle := TRUE;
+        UPDATE productos
+           SET stock = stock + v_linea.cantidad
+         WHERE id = v_linea.producto_id;
+        v_total_devuelto := v_total_devuelto + v_linea.cantidad;
+    END LOOP;
+
+    IF NOT v_tiene_detalle THEN
+        UPDATE productos
+           SET stock = stock + v_cantidad
+         WHERE id = v_producto_id;
+        v_total_devuelto := v_cantidad;
+    END IF;
+
+    p_mensaje := FORMAT(
+        'Pedido #%s cancelado correctamente. Se devolvieron %s unidad(es) al inventario.',
+        p_pedido_id,
+        v_total_devuelto
+    );
+END;
+$$;</script>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 06. VISTAS CON JOIN -->
+            <article class="req-card tech-card p-6 space-y-5" data-category="plpgsql">
+                <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#27272A] pb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono-num text-xs font-bold px-2 py-0.5 rounded bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/30">06</span>
+                            <span class="text-xs font-mono-num text-[#A1A1AA]">database/init.sql &middot; Líneas 428–490</span>
+                        </div>
+                        <h2 class="font-display text-lg font-bold text-[#F4F4F5]">
+                            Vistas Analíticas con <code>INNER JOIN</code> y <code>LEFT JOIN</code>
+                        </h2>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30">
+                        <i data-lucide="table-2" class="w-3.5 h-3.5"></i> 3 Vistas SQL
+                    </span>
+                </div>
+
+                <div class="inner-tabs-group space-y-4">
+                    <div class="flex flex-wrap gap-2">
+                        <button type="button" data-inner-tab="vw-ped" class="inner-tab-btn px-3 py-1.5 rounded-lg text-xs font-mono-num font-semibold">
+                            vw_resumen_pedidos
+                        </button>
+                        <button type="button" data-inner-tab="vw-prod" class="inner-tab-btn px-3 py-1.5 rounded-lg text-xs font-mono-num font-semibold">
+                            vw_ventas_por_producto
+                        </button>
+                        <button type="button" data-inner-tab="vw-usr" class="inner-tab-btn px-3 py-1.5 rounded-lg text-xs font-mono-num font-semibold">
+                            vw_resumen_por_usuario
+                        </button>
+                    </div>
+
+                    <div data-inner-panel="vw-ped" class="inner-tab-panel">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 428–451" data-start="428" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE VIEW vw_resumen_pedidos AS
+SELECT
+    pe.id AS pedido_id,
+    pe.fecha_pedido,
+    pe.estado,
+    u.id AS usuario_id,
+    u.nombre AS usuario_nombre,
+    u.email AS usuario_email,
+    cl.id AS cliente_id,
+    cl.documento AS cliente_documento,
+    COALESCE(cl.nombre_razon_social, 'Cliente General') AS cliente_nombre,
+    pr.id AS producto_id,
+    pr.codigo AS producto_codigo,
+    pr.nombre AS producto_nombre,
+    COALESCE(cat.nombre, 'Sin categoría') AS categoria_nombre,
+    pe.cantidad,
+    pe.subtotal,
+    pe.descuento,
+    pe.total
+FROM pedidos pe
+INNER JOIN usuarios u ON u.id = pe.usuario_id
+INNER JOIN productos pr ON pr.id = pe.producto_id
+LEFT JOIN categorias cat ON cat.id = pr.categoria_id
+LEFT JOIN clientes cl ON cl.id = pe.cliente_id;</script>
+                        </div>
+                    </div>
+
+                    <div data-inner-panel="vw-prod" class="inner-tab-panel hidden">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 453–472" data-start="453" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE VIEW vw_ventas_por_producto AS
+SELECT
+    pr.id AS producto_id,
+    pr.codigo,
+    pr.nombre AS producto_nombre,
+    COALESCE(cat.nombre, 'Sin categoría') AS categoria_nombre,
+    pr.precio_unitario,
+    pr.stock AS stock_actual,
+    CASE
+        WHEN pr.stock = 0 THEN 'AGOTADO'
+        WHEN pr.stock <= 10 THEN 'STOCK_BAJO'
+        ELSE 'DISPONIBLE'
+    END AS estado_stock,
+    COUNT(pe.id)::INTEGER AS total_pedidos,
+    COALESCE(SUM(pe.cantidad), 0)::INTEGER AS unidades_vendidas,
+    COALESCE(SUM(pe.total), 0.00)::NUMERIC(12, 2) AS ingresos_totales
+FROM productos pr
+LEFT JOIN categorias cat ON cat.id = pr.categoria_id
+LEFT JOIN pedidos pe ON pe.producto_id = pr.id AND UPPER(pe.estado) <> 'CANCELADO'
+GROUP BY pr.id, pr.codigo, pr.nombre, cat.nombre, pr.precio_unitario, pr.stock;</script>
+                        </div>
+                    </div>
+
+                    <div data-inner-panel="vw-usr" class="inner-tab-panel hidden">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 474–490" data-start="474" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE VIEW vw_resumen_por_usuario AS
+SELECT
+    u.id AS usuario_id,
+    u.nombre AS usuario_nombre,
+    u.email,
+    u.rol,
+    u.activo,
+    COUNT(pe.id)::INTEGER AS total_operaciones,
+    COUNT(pe.id) FILTER (WHERE UPPER(pe.estado) <> 'CANCELADO')::INTEGER AS pedidos_activos,
+    COUNT(pe.id) FILTER (WHERE UPPER(pe.estado) = 'CANCELADO')::INTEGER AS pedidos_cancelados,
+    COALESCE(
+        SUM(CASE WHEN UPPER(pe.estado) <> 'CANCELADO' THEN pe.total ELSE 0.00 END),
+        0.00
+    )::NUMERIC(12, 2) AS importe_acumulado
+FROM usuarios u
+LEFT JOIN pedidos pe ON pe.usuario_id = u.id
+GROUP BY u.id, u.nombre, u.email, u.rol, u.activo;</script>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 07. CONTROL TRANSACCIONAL ACID + SIMULADOR INTERACTIVO -->
+            <article class="req-card tech-card p-6 space-y-5" data-category="backend-dcl">
+                <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#27272A] pb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono-num text-xs font-bold px-2 py-0.5 rounded bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30">07</span>
+                            <span class="text-xs font-mono-num text-[#A1A1AA]">ms-operaciones-reportes/app/services/operaciones_service.py &middot; L494–L646</span>
+                        </div>
+                        <h2 class="font-display text-lg font-bold text-[#F4F4F5]">
+                            Control Transaccional Explícito (ACID: <code>BEGIN / COMMIT / ROLLBACK</code>)
+                        </h2>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30">
+                        <i data-lucide="git-commit-horizontal" class="w-3.5 h-3.5"></i> Atomicidad Demostrable
+                    </span>
+                </div>
+
+                <!-- Simulador Visual Interactivo -->
+                <div class="tech-panel p-4 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <h3 class="text-sm font-bold text-[#F4F4F5]">Simulador Interactivo del Flujo ACID en PostgreSQL</h3>
+                            <p class="text-xs text-[#A1A1AA]">Haz clic en cada escenario para ver cómo reaccionan Python y PostgreSQL paso a paso.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" id="sim-commit-btn"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#10B981]/15 hover:bg-[#10B981]/25 text-[#10B981] border border-[#10B981]/40 text-xs font-semibold transition-colors">
+                                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+                                <span>Ver flujo con Stock OK (COMMIT)</span>
+                            </button>
+                            <button type="button" id="sim-rollback-btn"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#F59E0B]/15 hover:bg-[#F59E0B]/25 text-[#F59E0B] border border-[#F59E0B]/40 text-xs font-semibold transition-colors">
+                                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                                <span>Ver flujo con Fallo en 2do ítem (ROLLBACK)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="sim-steps" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 text-xs font-mono-num">
+                        <div data-step="1" class="sim-step p-3 rounded-lg bg-[#09090B] border border-[#27272A] transition-all">
+                            <span class="text-[10px] text-[#71717A] block">PASO 1</span>
+                            <strong class="text-[#F4F4F5] block mt-0.5">BEGIN;</strong>
+                            <span class="text-[11px] font-sans text-[#A1A1AA]">Inicia transacción manual + valida usuario y cabecera en <code>pedidos</code>.</span>
+                        </div>
+                        <div data-step="2" class="sim-step p-3 rounded-lg bg-[#09090B] border border-[#27272A] transition-all">
+                            <span class="text-[10px] text-[#71717A] block">PASO 2</span>
+                            <strong class="text-[#F4F4F5] block mt-0.5">Ítem 1 (FOR UPDATE)</strong>
+                            <span class="text-[11px] font-sans text-[#A1A1AA]">Stock OK: descuenta 2 uds. e inserta línea 1 en <code>detalle_pedidos</code>.</span>
+                        </div>
+                        <div data-step="3" class="sim-step p-3 rounded-lg bg-[#09090B] border border-[#27272A] transition-all">
+                            <span class="text-[10px] text-[#71717A] block">PASO 3</span>
+                            <strong class="text-[#F4F4F5] block mt-0.5">Ítem 2 (Validación)</strong>
+                            <span class="text-[11px] font-sans text-[#A1A1AA]">Verifica stock del 2do producto con bloqueo exclusivo.</span>
+                        </div>
+                        <div data-step="4" class="sim-step p-3 rounded-lg bg-[#09090B] border border-[#27272A] transition-all">
+                            <span class="text-[10px] text-[#71717A] block">PASO 4</span>
+                            <strong class="text-[#F4F4F5] block mt-0.5">Decisión ACID</strong>
+                            <span class="text-[11px] font-sans text-[#A1A1AA]">Ejecuta <code>COMMIT;</code> o <code>ROLLBACK;</code> según resultado.</span>
+                        </div>
+                        <div data-step="5" class="sim-step p-3 rounded-lg bg-[#09090B] border border-[#27272A] transition-all">
+                            <span class="text-[10px] text-[#71717A] block">PASO 5</span>
+                            <strong class="text-[#F4F4F5] block mt-0.5">Estado Final BD</strong>
+                            <span class="text-[11px] font-sans text-[#A1A1AA]">Stock y bitácora <code>auditoria_logs</code> consistentes.</span>
+                        </div>
+                    </div>
+
+                    <div id="sim-summary" class="rounded-lg bg-[#09090B] border border-[#27272A] px-4 py-2.5 text-xs text-[#A1A1AA] font-mono-num">
+                        Selecciona uno de los dos escenarios para simular la ejecución paso a paso.
+                    </div>
+                </div>
+
+                <div class="code-slot" data-file="ms-operaciones-reportes/app/services/operaciones_service.py" data-lines="Líneas 494–646" data-start="494" data-lang="python">
+                    <script type="text/plain">def registrar_pedido_lote_service(
+    usuario_id: int,
+    cliente_id: int | None,
+    items: list[PedidoLoteItemRequest],
+    rol_db: str = "rol_operador",
+) -> dict[str, Any]:
+    """Registra un pedido multi-producto con control transaccional explícito BEGIN/COMMIT/ROLLBACK."""
+    try:
+        conn = get_db_connection(rol_db)
+    except (ValueError, RuntimeError, psycopg.Error) as exc:
+        raise _traducir_error_pg(exc, rol_db) from exc
+
+    conn.autocommit = True
+    try:
+        with conn.cursor() as cur:
+            cur.execute("BEGIN;")
+
+            usuario = cur.execute(
+                "SELECT id FROM usuarios WHERE id = %s AND activo = TRUE;",
+                (usuario_id,),
+            ).fetchone()
+            if not usuario:
+                raise ValueError(
+                    f"El usuario {usuario_id} no existe o se encuentra inactivo."
+                )
+
+            if cliente_id is not None:
+                cliente = cur.execute(
+                    "SELECT id FROM clientes WHERE id = %s;",
+                    (cliente_id,),
+                ).fetchone()
+                if not cliente:
+                    raise ValueError(f"El cliente {cliente_id} no existe.")
+
+            primer_producto = cur.execute(
+                "SELECT id FROM productos WHERE id = %s;",
+                (items[0].producto_id,),
+            ).fetchone()
+            if not primer_producto:
+                raise ValueError(f"El producto {items[0].producto_id} no existe.")
+
+            cabecera = cur.execute(
+                """
+                INSERT INTO pedidos (
+                    usuario_id, producto_id, cliente_id, cantidad,
+                    subtotal, descuento, total, estado
+                )
+                VALUES (%s, %s, %s, 1, 0.00, 0.00, 0.00, 'CONFIRMADO')
+                RETURNING id, fecha_pedido, estado;
+                """,
+                (usuario_id, items[0].producto_id, cliente_id),
+            ).fetchone()
+            pedido_id = cabecera["id"]
+
+            cantidad_total = 0
+            subtotal_total = Decimal("0.00")
+
+            for item in items:
+                producto = cur.execute(
+                    """
+                    SELECT id, codigo, precio_unitario, stock
+                      FROM productos
+                     WHERE id = %s
+                       FOR UPDATE;
+                    """,
+                    (item.producto_id,),
+                ).fetchone()
+                if not producto:
+                    raise ValueError(f"El producto {item.producto_id} no existe.")
+
+                if producto["stock"] < item.cantidad:
+                    raise ValueError(
+                        f"Stock insuficiente para producto {producto['codigo']} "
+                        f"(disponible: {producto['stock']}, solicitado: {item.cantidad}). "
+                        "Se ejecutó ROLLBACK completo de la transacción."
+                    )
+
+                cur.execute(
+                    "UPDATE productos SET stock = stock - %s WHERE id = %s;",
+                    (item.cantidad, item.producto_id),
+                )
+
+                subtotal_linea = (producto["precio_unitario"] * item.cantidad).quantize(
+                    Decimal("0.01")
+                )
+                cur.execute(
+                    """
+                    INSERT INTO detalle_pedidos (
+                        pedido_id, producto_id, cantidad, precio_unitario, subtotal_linea
+                    )
+                    VALUES (%s, %s, %s, %s, %s);
+                    """,
+                    (
+                        pedido_id,
+                        item.producto_id,
+                        item.cantidad,
+                        producto["precio_unitario"],
+                        subtotal_linea,
+                    ),
+                )
+
+                cantidad_total += item.cantidad
+                subtotal_total += subtotal_linea
+
+            desc_row = cur.execute(
+                "SELECT fn_calcular_descuento(%s, %s) AS descuento;",
+                (subtotal_total, cantidad_total),
+            ).fetchone()
+            descuento_total = (
+                desc_row["descuento"]
+                if desc_row and desc_row["descuento"] is not None
+                else Decimal("0.00")
+            )
+            total_final = (subtotal_total - descuento_total).quantize(Decimal("0.01"))
+
+            cur.execute(
+                """
+                UPDATE pedidos
+                   SET cantidad = %s,
+                       subtotal = %s,
+                       descuento = %s,
+                       total = %s
+                 WHERE id = %s;
+                """,
+                (cantidad_total, subtotal_total, descuento_total, total_final, pedido_id),
+            )
+
+            cur.execute("COMMIT;")
+
+        return {
+            "pedido_id": pedido_id,
+            "usuario_id": usuario_id,
+            "cliente_id": cliente_id,
+            "cantidad_total": cantidad_total,
+            "subtotal": subtotal_total,
+            "descuento": descuento_total,
+            "total": total_final,
+            "estado": cabecera["estado"],
+            "fecha_pedido": cabecera["fecha_pedido"],
+            "items_procesados": len(items),
+            "mensaje": (
+                f"Pedido compuesto #{pedido_id} confirmado con COMMIT "
+                f"({len(items)} línea(s), total: {total_final})."
+            ),
+        }
+    except (ValueError, RuntimeError, psycopg.Error) as exc:
+        try:
+            conn.execute("ROLLBACK;")
+        except Exception:
+            pass
+        raise _traducir_error_pg(exc, rol_db) from exc
+    finally:
+        conn.close()</script>
+                </div>
+            </article>
+
+            <!-- 08. SEGURIDAD DCL -->
+            <article class="req-card tech-card p-6 space-y-5" data-category="backend-dcl">
+                <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#27272A] pb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono-num text-xs font-bold px-2 py-0.5 rounded bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/30">08</span>
+                            <span class="text-xs font-mono-num text-[#A1A1AA]">database/init.sql &middot; database.py &middot; auth_service.py</span>
+                        </div>
+                        <h2 class="font-display text-lg font-bold text-[#F4F4F5]">
+                            Seguridad DCL en PostgreSQL (<code>GRANT / REVOKE</code>, <code>SET ROLE</code> y HTTP <code>403</code>)
+                        </h2>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/30">
+                        <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Enforcement Nativo
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 495–563" data-start="495" data-lang="sql">
+                        <script type="text/plain">DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'rol_admin') THEN
+        CREATE ROLE rol_admin NOLOGIN;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'rol_operador') THEN
+        CREATE ROLE rol_operador NOLOGIN;
+    END IF;
+END
+$$;
+
+GRANT rol_admin, rol_operador TO postgres;
+GRANT USAGE ON SCHEMA public TO rol_admin, rol_operador;
+
+REVOKE ALL PRIVILEGES ON TABLE
+    usuarios, categorias, productos, clientes, pedidos, detalle_pedidos, auditoria_logs
+    FROM PUBLIC;
+REVOKE ALL PRIVILEGES ON
+    vw_resumen_pedidos, vw_ventas_por_producto, vw_resumen_por_usuario
+    FROM PUBLIC;
+
+GRANT ALL PRIVILEGES ON TABLE
+    usuarios, categorias, productos, clientes, pedidos, detalle_pedidos, auditoria_logs
+    TO rol_admin;
+GRANT SELECT ON
+    vw_resumen_pedidos, vw_ventas_por_producto, vw_resumen_por_usuario
+    TO rol_admin;
+GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA public TO rol_admin;
+
+REVOKE ALL PRIVILEGES ON TABLE
+    usuarios, categorias, productos, clientes, pedidos, detalle_pedidos, auditoria_logs
+    FROM rol_operador;
+REVOKE ALL PRIVILEGES ON
+    vw_resumen_pedidos, vw_ventas_por_producto, vw_resumen_por_usuario
+    FROM rol_operador;
+
+GRANT SELECT ON TABLE usuarios, categorias TO rol_operador;
+GRANT SELECT ON
+    vw_resumen_pedidos, vw_ventas_por_producto, vw_resumen_por_usuario
+    TO rol_operador;
+GRANT SELECT, INSERT, UPDATE ON TABLE
+    productos, clientes, pedidos, detalle_pedidos
+    TO rol_operador;
+REVOKE DELETE ON TABLE
+    usuarios, categorias, productos, clientes, pedidos, detalle_pedidos
+    FROM rol_operador;
+REVOKE ALL PRIVILEGES ON TABLE auditoria_logs FROM rol_operador;
+GRANT USAGE, SELECT ON SEQUENCE
+    productos_id_seq, clientes_id_seq, pedidos_id_seq, detalle_pedidos_id_seq
+    TO rol_operador;
+
+GRANT EXECUTE ON FUNCTION fn_calcular_descuento(NUMERIC, INTEGER) TO rol_admin, rol_operador;
+GRANT EXECUTE ON PROCEDURE proc_registrar_pedido(INTEGER, INTEGER, INTEGER, INTEGER, TEXT) TO rol_admin, rol_operador;
+GRANT EXECUTE ON PROCEDURE proc_cancelar_pedido(INTEGER, TEXT) TO rol_admin, rol_operador;
+GRANT EXECUTE ON FUNCTION fn_reporte_ventas(TIMESTAMP, TIMESTAMP) TO rol_admin, rol_operador;
+GRANT EXECUTE ON FUNCTION fn_promedio_ponderado_sfunc(NUMERIC[], NUMERIC, NUMERIC) TO rol_admin, rol_operador;
+GRANT EXECUTE ON FUNCTION fn_promedio_ponderado_ffunc(NUMERIC[]) TO rol_admin, rol_operador;
+GRANT EXECUTE ON FUNCTION fn_promedio_ponderado(NUMERIC, NUMERIC) TO rol_admin, rol_operador;
+GRANT EXECUTE ON FUNCTION fn_auditar_cambios() TO rol_admin, rol_operador;</script>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="code-slot" data-file="ms-usuarios-seguridad/app/core/database.py" data-lines="Líneas 18–42" data-start="18" data-lang="python">
+                            <script type="text/plain">def get_db_connection(rol: str = "rol_operador") -> psycopg.Connection:
+    """Abre una conexión a PostgreSQL con sslmode configurable y aplica SET ROLE."""
+    if rol not in VALID_ROLES:
+        raise ValueError(f"Rol de base de datos no válido: {rol}")
+
+    database_url = os.getenv("DATABASE_URL")
+    if not database_url:
+        raise RuntimeError(
+            "La variable de entorno DATABASE_URL no está configurada en .env."
+        )
+
+    sslmode = os.getenv("DB_SSLMODE", "require")
+    conn = psycopg.connect(
+        database_url,
+        sslmode=sslmode,
+        row_factory=dict_row,
+    )
+    try:
+        conn.execute(sql.SQL("SET ROLE {}").format(sql.Identifier(rol)))
+        conn.commit()
+    except Exception:
+        conn.close()
+        raise
+
+    return conn</script>
+                        </div>
+
+                        <div class="code-slot" data-file="ms-usuarios-seguridad/app/services/auth_service.py" data-lines="Líneas 16–48" data-start="16" data-lang="python">
+                            <script type="text/plain">@contextmanager
+def _db_cursor(rol_db: str) -> Iterator[psycopg.Cursor]:
+    """Gestiona conexión, cursor y traducción uniforme de errores de PostgreSQL."""
+    try:
+        with get_db_connection(rol_db) as conn:
+            with conn.cursor() as cur:
+                yield cur
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
+    except RuntimeError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(exc),
+        ) from exc
+    except psycopg.errors.InsufficientPrivilege as exc:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Permiso denegado en PostgreSQL para el rol '{rol_db}': {exc}",
+        ) from exc</script>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 09. BACKEND EN MICROSERVICIOS -->
+            <article class="req-card tech-card p-6 space-y-5" data-category="backend-dcl">
+                <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#27272A] pb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono-num text-xs font-bold px-2 py-0.5 rounded bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/30">09</span>
+                            <span class="text-xs font-mono-num text-[#A1A1AA]">FastAPI + Uvicorn + psycopg v3 (Sin ORM)</span>
+                        </div>
+                        <h2 class="font-display text-lg font-bold text-[#F4F4F5]">
+                            Backend en Microservicios por Capas (<code>core</code>, <code>schemas</code>, <code>services</code>, <code>routers</code>)
+                        </h2>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="http://localhost:8001/docs" target="_blank" rel="noopener noreferrer"
+                           class="text-xs font-mono-num px-2.5 py-1 rounded-lg bg-[#18181B] hover:bg-[#27272A] border border-[#27272A] text-[#38BDF8]">
+                            Swagger :8001 &rarr;
+                        </a>
+                        <a href="http://localhost:8002/docs" target="_blank" rel="noopener noreferrer"
+                           class="text-xs font-mono-num px-2.5 py-1 rounded-lg bg-[#18181B] hover:bg-[#27272A] border border-[#27272A] text-[#38BDF8]">
+                            Swagger :8002 &rarr;
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="tech-panel p-4 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <strong class="text-sm font-display text-[#F4F4F5]">ms-usuarios-seguridad</strong>
+                            <span class="font-mono-num px-2 py-0.5 rounded bg-[#09090B] border border-[#27272A] text-[#10B981]">:8001</span>
+                        </div>
+                        <ul class="space-y-1.5 font-mono-num text-[11px] text-[#A1A1AA]">
+                            <li><span class="text-[#38BDF8]">GET/POST</span> /api/v1/usuarios</li>
+                            <li><span class="text-[#38BDF8]">GET/PUT/DELETE</span> /api/v1/usuarios/{usuario_id}</li>
+                            <li><span class="text-[#10B981]">POST</span> /api/v1/auth/login</li>
+                            <li><span class="text-[#F59E0B]">GET</span> /api/v1/auditoria (?tabla_afectada, ?operacion)</li>
+                            <li><span class="text-[#F59E0B]">GET</span> /api/v1/auditoria/resumen</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-panel p-4 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <strong class="text-sm font-display text-[#F4F4F5]">ms-operaciones-reportes</strong>
+                            <span class="font-mono-num px-2 py-0.5 rounded bg-[#09090B] border border-[#27272A] text-[#10B981]">:8002</span>
+                        </div>
+                        <ul class="space-y-1.5 font-mono-num text-[11px] text-[#A1A1AA]">
+                            <li><span class="text-[#38BDF8]">CRUD</span> /api/v1/productos &bull; /categorias &bull; /clientes</li>
+                            <li><span class="text-[#10B981]">POST</span> /api/v1/descuentos/calcular (fn_calcular_descuento)</li>
+                            <li><span class="text-[#10B981]">GET/POST</span> /api/v1/pedidos &bull; /pedidos/lote (ACID)</li>
+                            <li><span class="text-[#F59E0B]">PATCH/DELETE</span> /api/v1/pedidos/{id}/cancelar | /{id}</li>
+                            <li><span class="text-[#38BDF8]">GET</span> /api/v1/reportes/ventas &bull; /promedio-ponderado &bull; /vistas/*</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 10. CASO DE USO PRINCIPAL -->
+            <article class="req-card tech-card p-6 space-y-4" data-category="docker-cu">
+                <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#27272A] pb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono-num text-xs font-bold px-2 py-0.5 rounded bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30">10</span>
+                            <span class="text-xs font-mono-num text-[#A1A1AA]">docs/SUSTENTACION_Y_CASO_DE_USO.md &middot; CU-01</span>
+                        </div>
+                        <h2 class="font-display text-lg font-bold text-[#F4F4F5]">
+                            Caso de Uso Principal (CU-01): Ventas en Lote, Inventario, Auditoría y DCL
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    <div class="tech-panel p-4 space-y-2">
+                        <p class="font-bold text-[#10B981] uppercase tracking-wider text-[11px]">Flujo Normal (COMMIT)</p>
+                        <p class="text-[#A1A1AA] leading-relaxed">
+                            <code>rol_operador</code> arma un lote de 2+ ítems &rarr; <code>BEGIN</code> &rarr; bloqueo <code>FOR UPDATE</code> &rarr; descuenta stock &rarr; inserta <code>detalle_pedidos</code> &rarr; calcula <code>fn_calcular_descuento</code> &rarr; <code>COMMIT</code> &rarr; triggers escriben en <code>auditoria_logs</code>.
+                        </p>
+                    </div>
+                    <div class="tech-panel p-4 space-y-2">
+                        <p class="font-bold text-[#F59E0B] uppercase tracking-wider text-[11px]">Flujo Alterno 1 (ROLLBACK)</p>
+                        <p class="text-[#A1A1AA] leading-relaxed">
+                            Si el 2do ítem supera el stock disponible, Python ejecuta <code>ROLLBACK;</code> y responde <code>400 Bad Request</code>; el stock del 1er ítem y la cabecera quedan revertidos atómicamente.
+                        </p>
+                    </div>
+                    <div class="tech-panel p-4 space-y-2">
+                        <p class="font-bold text-[#EF4444] uppercase tracking-wider text-[11px]">Flujo Alterno 2 (REVOKE 403) y 3 (Cancelación)</p>
+                        <p class="text-[#A1A1AA] leading-relaxed">
+                            Cualquier <code>DELETE</code> o lectura a <code>auditoria_logs</code> como <code>rol_operador</code> dispara <code>403 Forbidden</code>. Cancelar un pedido ejecuta <code>CALL proc_cancelar_pedido</code> reponiendo stock.
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 11. CRUD COMPLETO -->
+            <article class="req-card tech-card p-6 space-y-4" data-category="backend-dcl">
+                <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#27272A] pb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono-num text-xs font-bold px-2 py-0.5 rounded bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/30">11</span>
+                            <span class="text-xs font-mono-num text-[#A1A1AA]">5 Entidades &middot; Validación Pydantic + PostgreSQL</span>
+                        </div>
+                        <h2 class="font-display text-lg font-bold text-[#F4F4F5]">
+                            CRUD Completo y Manejo Semántico de Errores HTTP
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-xs text-left border border-[#27272A] rounded-lg overflow-hidden">
+                        <thead class="bg-[#18181B] text-[11px] uppercase tracking-wider text-[#A1A1AA] border-b border-[#27272A]">
+                            <tr>
+                                <th class="px-4 py-2.5">Entidad</th>
+                                <th class="px-4 py-2.5">Puerto</th>
+                                <th class="px-4 py-2.5">Operaciones</th>
+                                <th class="px-4 py-2.5">Permisos rol_operador</th>
+                                <th class="px-4 py-2.5">Errores Mapeados</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#27272A] text-[#F4F4F5] font-mono-num">
+                            <tr>
+                                <td class="px-4 py-2.5 font-semibold">usuarios</td>
+                                <td class="px-4 py-2.5 text-[#38BDF8]">:8001</td>
+                                <td class="px-4 py-2.5">GET, GET/{id}, POST, PUT, DELETE</td>
+                                <td class="px-4 py-2.5 text-[#F59E0B]">Solo SELECT (POST/PUT/DEL &rarr; 403)</td>
+                                <td class="px-4 py-2.5 text-[#A1A1AA]">401, 403, 404, 409</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2.5 font-semibold">productos</td>
+                                <td class="px-4 py-2.5 text-[#38BDF8]">:8002</td>
+                                <td class="px-4 py-2.5">GET, GET/{id}, POST, PUT, DELETE</td>
+                                <td class="px-4 py-2.5 text-[#10B981]">SELECT, INSERT, UPDATE (DEL &rarr; 403)</td>
+                                <td class="px-4 py-2.5 text-[#A1A1AA]">400, 403, 404, 409</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2.5 font-semibold">categorias</td>
+                                <td class="px-4 py-2.5 text-[#38BDF8]">:8002</td>
+                                <td class="px-4 py-2.5">GET, GET/{id}, POST, PUT, DELETE</td>
+                                <td class="px-4 py-2.5 text-[#F59E0B]">Solo SELECT (POST/PUT/DEL &rarr; 403)</td>
+                                <td class="px-4 py-2.5 text-[#A1A1AA]">400, 403, 404, 409</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2.5 font-semibold">clientes</td>
+                                <td class="px-4 py-2.5 text-[#38BDF8]">:8002</td>
+                                <td class="px-4 py-2.5">GET, GET/{id}, POST, PUT, DELETE</td>
+                                <td class="px-4 py-2.5 text-[#10B981]">SELECT, INSERT, UPDATE (DEL &rarr; 403)</td>
+                                <td class="px-4 py-2.5 text-[#A1A1AA]">400, 403, 404, 409</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2.5 font-semibold">pedidos / detalle</td>
+                                <td class="px-4 py-2.5 text-[#38BDF8]">:8002</td>
+                                <td class="px-4 py-2.5">GET, GET/{id}, POST, /lote, /cancelar, DEL</td>
+                                <td class="px-4 py-2.5 text-[#10B981]">Operación + CALL (DEL &rarr; 403)</td>
+                                <td class="px-4 py-2.5 text-[#A1A1AA]">400 (Stock/ROLLBACK), 403, 404</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <!-- 12. LOGS, REPORTES Y ACCESOS EN VIVO -->
+            <article class="req-card tech-card p-6 space-y-4" data-category="docker-cu">
+                <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[#27272A] pb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono-num text-xs font-bold px-2 py-0.5 rounded bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30">12</span>
+                            <span class="text-xs font-mono-num text-[#A1A1AA]">Frontend SPA (:3000) &middot; Prueba en Vivo</span>
+                        </div>
+                        <h2 class="font-display text-lg font-bold text-[#F4F4F5]">
+                            Matriz de Demostración en Vivo (Módulos SPA, Logs y Reportes)
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                    <div class="tech-panel p-4 flex flex-col justify-between gap-3">
+                        <div class="space-y-1">
+                            <p class="font-bold text-[#F4F4F5]">1. Dashboard y Reportes</p>
+                            <p class="text-[#A1A1AA]">KPIs en vivo, <code>fn_promedio_ponderado</code>, vistas <code>vw_*</code> y filtro de fechas.</p>
+                        </div>
+                        <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-1 text-[#38BDF8] hover:underline font-semibold">
+                            <span>Probar en Vivo</span><i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                    <div class="tech-panel p-4 flex flex-col justify-between gap-3">
+                        <div class="space-y-1">
+                            <p class="font-bold text-[#F4F4F5]">2. POS y Demo ROLLBACK</p>
+                            <p class="text-[#A1A1AA]">Ticket en vivo 60/40, botón de fallo controlado ACID y cancelación de pedido.</p>
+                        </div>
+                        <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-1 text-[#10B981] hover:underline font-semibold">
+                            <span>Probar en Vivo</span><i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                    <div class="tech-panel p-4 flex flex-col justify-between gap-3">
+                        <div class="space-y-1">
+                            <p class="font-bold text-[#F4F4F5]">3. Inventario &amp; Clientes</p>
+                            <p class="text-[#A1A1AA]">CRUD completo y demostración visual del bloqueo <code>403 Forbidden</code> al borrar.</p>
+                        </div>
+                        <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-1 text-[#38BDF8] hover:underline font-semibold">
+                            <span>Probar en Vivo</span><i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                    <div class="tech-panel p-4 flex flex-col justify-between gap-3">
+                        <div class="space-y-1">
+                            <p class="font-bold text-[#F4F4F5]">4. Auditoría en Vivo (Logs)</p>
+                            <p class="text-[#A1A1AA]">Filtros por tabla/operación, resumen agrupado y payloads JSON de triggers.</p>
+                        </div>
+                        <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-1 text-[#F59E0B] hover:underline font-semibold">
+                            <span>Probar en Vivo</span><i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <script>
+        function renderCodeSnapshots() {
+            document.querySelectorAll('.code-slot').forEach((slot) => {
+                const rawScript = slot.querySelector('script[type="text/plain"]');
+                if (!rawScript) return;
+
+                const codeText = rawScript.textContent.replace(/^\n+|\n+$/g, '');
+                const file = slot.dataset.file || '';
+                const linesLabel = slot.dataset.lines || '';
+                const startLine = Number(slot.dataset.start || 1);
+                const lang = (slot.dataset.lang || 'sql').toLowerCase();
+
+                const linesCount = codeText.split('\n').length;
+                const lineNumbers = Array.from({ length: linesCount }, (_, i) => String(startLine + i)).join('\n');
+
+                let highlightedHtml = '';
+                try {
+                    highlightedHtml = hljs.highlight(codeText, { language: lang }).value;
+                } catch {
+                    highlightedHtml = codeText.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+                }
+
+                const win = document.createElement('div');
+                win.className = 'ide-window';
+                win.innerHTML = `
+                    <div class="ide-header px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#EF4444]/80"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B]/80"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#10B981]/80"></span>
+                            </div>
+                            <span class="font-mono-num text-xs text-[#F4F4F5] truncate"></span>
+                            <span class="font-mono-num text-[11px] text-[#A1A1AA] shrink-0"></span>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="font-mono-num text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-[#27272A] text-[#38BDF8]"></span>
+                            <button type="button"
+                                    class="copy-code-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#27272A] hover:bg-[#3F3F46] text-[#F4F4F5] text-[11px] font-medium transition-colors">
+                                <i data-lucide="copy" class="w-3 h-3"></i>
+                                <span>Copiar código</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ide-body">
+                        <div class="ide-gutter"></div>
+                        <pre class="ide-code-pre"><code class="hljs language-${lang}"></code></pre>
+                    </div>
+                `;
+
+                const spans = win.querySelectorAll('.ide-header span');
+                spans[3].textContent = file;
+                spans[4].textContent = linesLabel ? `· ${linesLabel}` : '';
+                spans[5].textContent = lang.toUpperCase();
+
+                win.querySelector('.ide-gutter').textContent = lineNumbers;
+                win.querySelector('code.hljs').innerHTML = highlightedHtml;
+
+                const copyBtn = win.querySelector('.copy-code-btn');
+                copyBtn.addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText(codeText);
+                        copyBtn.innerHTML = '<i data-lucide="check" class="w-3 h-3 text-[#10B981]"></i><span class="text-[#10B981]">Copiado</span>';
+                        lucide.createIcons({ attrs: { 'stroke-width': '1.75' } });
+                        setTimeout(() => {
+                            copyBtn.innerHTML = '<i data-lucide="copy" class="w-3 h-3"></i><span>Copiar código</span>';
+                            lucide.createIcons({ attrs: { 'stroke-width': '1.75' } });
+                        }, 1800);
+                    } catch {
+                        // Portapapeles no disponible
+                    }
+                });
+
+                slot.innerHTML = '';
+                slot.appendChild(win);
+            });
+        }
+
+        function initFilters() {
+            const buttons = document.querySelectorAll('.filter-btn');
+            const cards = document.querySelectorAll('.req-card');
+
+            function applyFilter(cat) {
+                buttons.forEach((b) => {
+                    const active = b.dataset.filter === cat;
+                    b.className = active
+                        ? 'filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap bg-[#F4F4F5] text-[#09090B] transition-colors'
+                        : 'filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap bg-[#18181B] text-[#A1A1AA] hover:text-[#F4F4F5] border border-[#27272A] transition-colors';
+                });
+
+                cards.forEach((c) => {
+                    const show = cat === 'all' || c.dataset.category === cat;
+                    c.classList.toggle('hidden', !show);
+                });
+            }
+
+            buttons.forEach((b) => b.addEventListener('click', () => applyFilter(b.dataset.filter)));
+            applyFilter('all');
+        }
+
+        function initInnerTabs() {
+            document.querySelectorAll('.inner-tabs-group').forEach((group) => {
+                const btns = group.querySelectorAll('.inner-tab-btn');
+                const panels = group.querySelectorAll('.inner-tab-panel');
+
+                function activate(id) {
+                    btns.forEach((b) => {
+                        const active = b.dataset.innerTab === id;
+                        b.className = active
+                            ? 'inner-tab-btn px-3 py-1.5 rounded-lg text-xs font-mono-num font-semibold bg-[#38BDF8]/15 text-[#38BDF8] border border-[#38BDF8]/40'
+                            : 'inner-tab-btn px-3 py-1.5 rounded-lg text-xs font-mono-num font-semibold bg-[#18181B] text-[#A1A1AA] hover:text-[#F4F4F5] border border-[#27272A]';
+                    });
+                    panels.forEach((p) => {
+                        p.classList.toggle('hidden', p.dataset.innerPanel !== id);
+                    });
+                }
+
+                btns.forEach((b) => b.addEventListener('click', () => activate(b.dataset.innerTab)));
+                if (btns.length) activate(btns[0].dataset.innerTab);
+            });
+        }
+
+        function initMereZoom() {
+            let zoom = 1;
+            const stage = document.getElementById('mere-zoom-stage');
+            const label = document.getElementById('mere-zoom-label');
+
+            function updateZoom() {
+                if (!stage || !label) return;
+                stage.style.transform = `scale(${zoom})`;
+                label.textContent = `${Math.round(zoom * 100)}%`;
+            }
+
+            document.querySelectorAll('[data-zoom-action]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const act = btn.dataset.zoomAction;
+                    if (act === 'in') zoom = Math.min(2, +(zoom + 0.15).toFixed(2));
+                    if (act === 'out') zoom = Math.max(0.6, +(zoom - 0.15).toFixed(2));
+                    if (act === 'reset') zoom = 1;
+                    updateZoom();
+                });
+            });
+        }
+
+        function initAcidSimulator() {
+            const steps = document.querySelectorAll('#sim-steps .sim-step');
+            const summary = document.getElementById('sim-summary');
+
+            function runSimulation(mode) {
+                steps.forEach((el) => {
+                    el.className = 'sim-step p-3 rounded-lg bg-[#09090B] border border-[#27272A] opacity-45 transition-all';
+                });
+
+                const commitTimeline = [
+                    { step: 1, cls: 'border-[#38BDF8] bg-[#38BDF8]/10 opacity-100', msg: 'Paso 1: conn.execute("BEGIN;") + INSERT cabecera en pedidos.' },
+                    { step: 2, cls: 'border-[#38BDF8] bg-[#38BDF8]/10 opacity-100', msg: 'Paso 2: Ítem 1 bloqueado con FOR UPDATE -> stock descontado y detalle 1 insertado.' },
+                    { step: 3, cls: 'border-[#10B981] bg-[#10B981]/10 opacity-100', msg: 'Paso 3: Ítem 2 con stock suficiente -> stock descontado y detalle 2 insertado.' },
+                    { step: 4, cls: 'border-[#10B981] bg-[#10B981]/15 opacity-100', msg: 'Paso 4: fn_calcular_descuento() aplicado -> cur.execute("COMMIT;").' },
+                    { step: 5, cls: 'border-[#10B981] bg-[#10B981]/20 opacity-100', msg: 'COMPLETADO (HTTP 201): Ambas líneas guardadas, stock actualizado y triggers registrados.' },
+                ];
+
+                const rollbackTimeline = [
+                    { step: 1, cls: 'border-[#38BDF8] bg-[#38BDF8]/10 opacity-100', msg: 'Paso 1: conn.execute("BEGIN;") + INSERT cabecera temporal en pedidos.' },
+                    { step: 2, cls: 'border-[#38BDF8] bg-[#38BDF8]/10 opacity-100', msg: 'Paso 2: Ítem 1 (2 uds.) bloqueado con FOR UPDATE -> descuento provisional en transacción.' },
+                    { step: 3, cls: 'border-[#EF4444] bg-[#EF4444]/15 opacity-100', msg: 'Paso 3: Ítem 2 pide 99999 uds. -> Stock insuficiente -> lanza ValueError.' },
+                    { step: 4, cls: 'border-[#F59E0B] bg-[#F59E0B]/15 opacity-100', msg: 'Paso 4: Bloque except ejecuta conn.execute("ROLLBACK;") explícito.' },
+                    { step: 5, cls: 'border-[#10B981] bg-[#10B981]/15 opacity-100', msg: 'ATOMICIDAD VERIFICADA (HTTP 400): Cabecera, detalle 1 y stock del Ítem 1 revertidos al estado inicial.' },
+                ];
+
+                const plan = mode === 'commit' ? commitTimeline : rollbackTimeline;
+                plan.forEach((entry, idx) => {
+                    setTimeout(() => {
+                        const card = document.querySelector(`#sim-steps [data-step="${entry.step}"]`);
+                        if (card) {
+                            card.className = `sim-step p-3 rounded-lg border transition-all ${entry.cls}`;
+                        }
+                        if (summary) {
+                            summary.textContent = entry.msg;
+                            summary.className =
+                                mode === 'commit'
+                                    ? 'rounded-lg bg-[#10B981]/10 border border-[#10B981]/40 px-4 py-2.5 text-xs text-[#10B981] font-mono-num'
+                                    : 'rounded-lg bg-[#F59E0B]/10 border border-[#F59E0B]/40 px-4 py-2.5 text-xs text-[#F59E0B] font-mono-num';
+                        }
+                    }, idx * 240);
+                });
+            }
+
+            document.getElementById('sim-commit-btn')?.addEventListener('click', () => runSimulation('commit'));
+            document.getElementById('sim-rollback-btn')?.addEventListener('click', () => runSimulation('rollback'));
+        }
+
+        async function checkLiveHealth() {
+            const targets = [
+                { id: 'health-8001', url: 'http://localhost:8001/health', label: ':8001' },
+                { id: 'health-8002', url: 'http://localhost:8002/health', label: ':8002' },
+            ];
+            await Promise.all(
+                targets.map(async (t) => {
+                    const el = document.getElementById(t.id);
+                    if (!el) return;
+                    try {
+                        const res = await fetch(t.url);
+                        if (res.ok) {
+                            el.innerHTML = `<span class="w-2 h-2 rounded-full bg-[#10B981]"></span><span class="text-[#10B981]">${t.label} OK</span>`;
+                            return;
+                        }
+                    } catch {
+                        // Servicio offline
+                    }
+                    el.innerHTML = `<span class="w-2 h-2 rounded-full bg-[#EF4444]"></span><span class="text-[#EF4444]">${t.label} Offline</span>`;
+                })
+            );
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            renderCodeSnapshots();
+            initFilters();
+            initInnerTabs();
+            initMereZoom();
+            initAcidSimulator();
+
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'dark',
+                themeVariables: {
+                    primaryColor: '#18181B',
+                    primaryTextColor: '#F4F4F5',
+                    primaryBorderColor: '#38BDF8',
+                    lineColor: '#71717A',
+                    secondaryColor: '#111318',
+                    tertiaryColor: '#161B22',
+                },
+            });
+            await mermaid.run({ querySelector: '.mermaid' });
+
+            lucide.createIcons({ attrs: { 'stroke-width': '1.75' } });
+            checkLiveHealth();
+        });
+    </script>
+</body>
+</html>

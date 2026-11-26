@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proyecto Final de Bases de Datos — TechCore Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body class="bg-[#F8F9FA] text-[#09090B] min-h-screen flex">
+
+    <!-- Backdrop móvil para sidebar -->
+    <div id="sidebar-backdrop" class="fixed inset-0 z-40 hidden bg-zinc-950/30 md:hidden"></div>
+
+    <!-- Barra lateral fija izquierda (240px) -->
+    <aside id="sidebar"
+           class="fixed inset-y-0 left-0 z-50 w-[240px] bg-white border-r border-[#E4E4E7] flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-out">
+        <!-- Marca TechCore -->
+        <div class="h-[60px] px-5 border-b border-[#E4E4E7] flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#0F172A] text-white flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 7h16M7 12h10M10 17h4" stroke-linecap="round" />
+                    <rect x="3" y="3" width="18" height="18" rx="3" stroke-width="1.75" />
+                </svg>
+            </div>
+            <div class="min-w-0">
+                <span class="font-display text-[15px] font-bold text-[#09090B] block leading-none">TechCore Store</span>
+                <span class="text-[11px] font-medium text-[#71717A] tracking-tight block mt-1">Proyecto Final de Bases de Datos</span>
+            </div>
+        </div>
+
+        <!-- Navegación SPA -->
+        <div class="px-3 pt-4 pb-2 flex-1 overflow-y-auto">
+            <p class="px-2.5 pb-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-[#71717A]">
+                Operación
+            </p>
+            <nav id="spa-nav" class="space-y-1">
+                <button data-tab="dashboard"
+                        class="nav-tab w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors duration-150 text-left">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i>
+                    <span>Dashboard y Reportes</span>
+                </button>
+                <button data-tab="pos"
+                        class="nav-tab w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors duration-150 text-left">
+                    <i data-lucide="shopping-bag" class="w-4 h-4 shrink-0"></i>
+                    <span>Punto de Venta (POS)</span>
+                </button>
+                <button data-tab="inventario"
+                        class="nav-tab w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors duration-150 text-left">
+                    <i data-lucide="package" class="w-4 h-4 shrink-0"></i>
+                    <span>Inventario y Categorías</span>
+                </button>
+                <button data-tab="clientes-usuarios"
+                        class="nav-tab w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors duration-150 text-left">
+                    <i data-lucide="users" class="w-4 h-4 shrink-0"></i>
+                    <span>Clientes y Usuarios</span>
+                </button>
+                <button data-tab="auditoria"
+                        class="nav-tab w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors duration-150 text-left">
+                    <i data-lucide="shield-alert" class="w-4 h-4 shrink-0"></i>
+                    <span>Auditoría en Vivo</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Pie lateral: estado de puertos 8001 y 8002 -->
+        <div class="p-4 border-t border-[#E4E4E7] bg-[#FAFAFA] space-y-2">
+            <p class="text-[10px] font-semibold uppercase tracking-[0.06em] text-[#71717A]">
+                Microservicios FastAPI
+            </p>
+            <div class="space-y-1.5 text-xs font-mono-num">
+                <div id="status-ms-8001" class="flex items-center justify-between text-[#52525B]">
+                    <span class="inline-flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-zinc-300"></span> :8001 Usuarios
+                    </span>
+                    <span class="text-[10px] text-[#71717A]">...</span>
+                </div>
+                <div id="status-ms-8002" class="flex items-center justify-between text-[#52525B]">
+                    <span class="inline-flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-zinc-300"></span> :8002 Operaciones
+                    </span>
+                    <span class="text-[10px] text-[#71717A]">...</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Área de trabajo principal -->
+    <div id="workspace-shell" class="flex-1 md:pl-[240px] flex flex-col min-w-0 transition-colors duration-150">
+        <!-- Barra superior fija (60px) -->
+        <header class="sticky top-0 z-30 h-[60px] bg-white border-b border-[#E4E4E7] px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 min-w-0">
+                <button id="mobile-menu-btn" type="button"
+                        class="md:hidden p-1.5 rounded-lg border border-[#E4E4E7] text-[#52525B] hover:bg-zinc-100">
+                    <i data-lucide="menu" class="w-4 h-4"></i>
+                </button>
+                <div class="min-w-0">
+                    <h1 id="topbar-module-title" class="font-display text-[15px] font-bold text-[#09090B] truncate">
+                        Dashboard y Reportes
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Indicador de Conexión + Rol + Segmented Control X-DB-Role -->
+            <div class="flex items-center gap-2.5 shrink-0">
+                <div id="connection-mode-badge"
+                     class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#F4F4F5] text-[#52525B] border border-[#E4E4E7]">
+                    <span class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span>
+                    <span>Verificando...</span>
+                </div>
+
+                <div id="role-badge"
+                     class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#FFFBEB] text-[#B45309] border border-amber-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                    <span>Acceso Restringido · DCL Activo</span>
+                </div>
+
+                <!-- Segmented control tipo píldora -->
+                <div class="inline-flex items-center p-0.5 rounded-full bg-[#F4F4F5] border border-[#E4E4E7]" role="group" aria-label="Selector de rol PostgreSQL">
+                    <button type="button" data-role-option="rol_operador"
+                            class="role-pill px-3 py-1 rounded-full text-xs font-medium font-mono-num transition-all duration-150">
+                        rol_operador
+                    </button>
+                    <button type="button" data-role-option="rol_admin"
+                            class="role-pill px-3 py-1 rounded-full text-xs font-medium font-mono-num transition-all duration-150">
+                        rol_admin
+                    </button>
+                </div>
+
+                <!-- Select sincronizado para compatibilidad con scripts -->
+                <select id="global-role-selector" class="sr-only" aria-label="Rol DB activo">
+                    <option value="rol_operador">rol_operador</option>
+                    <option value="rol_admin">rol_admin</option>
+                </select>
+            </div>
+        </header>
+
+        <!-- Banner de alerta DCL 403 estilo ingeniería -->
+        <div id="dcl-alert-banner" class="hidden bg-[#FEF2F2] border-b border-red-200 border-l-4 border-l-[#DC2626]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+                <div class="flex items-start sm:items-center gap-3">
+                    <i data-lucide="shield-alert" class="w-5 h-5 text-[#DC2626] shrink-0 mt-0.5 sm:mt-0"></i>
+                    <div>
+                        <p class="text-[13px] font-semibold text-[#991B1B]">
+                            Acceso denegado por PostgreSQL (REVOKE): el rol activo no tiene permisos para esta operación
+                        </p>
+                        <p id="dcl-banner-detail" class="text-xs text-[#B91C1C] mt-0.5 font-mono-num"></p>
+                    </div>
+                </div>
+                <button id="dcl-banner-close" type="button"
+                        class="text-[#B91C1C] hover:text-[#7F1D1D] p-1 rounded-md hover:bg-red-100 transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenido principal SPA -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <section id="tab-dashboard" class="tab-panel"></section>
+            <section id="tab-pos" class="tab-panel hidden"></section>
+            <section id="tab-inventario" class="tab-panel hidden"></section>
+            <section id="tab-clientes-usuarios" class="tab-panel hidden"></section>
+            <section id="tab-auditoria" class="tab-panel hidden"></section>
+        </main>
+    </div>
+
+    <!-- Modal de Seguridad PostgreSQL (HTTP 403 Forbidden) -->
+    <div id="dcl-forbidden-modal"
+         class="fixed inset-0 z-50 hidden items-center justify-center bg-zinc-950/50 backdrop-blur-[2px] p-4">
+        <div class="bg-white rounded-[10px] max-w-lg w-full border border-[#E4E4E7] border-l-4 border-l-[#DC2626] shadow-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-[#E4E4E7] flex items-start gap-3">
+                <div class="w-9 h-9 rounded-lg bg-[#FEF2F2] border border-red-200 flex items-center justify-center shrink-0">
+                    <i data-lucide="shield-ban" class="w-5 h-5 text-[#DC2626]"></i>
+                </div>
+                <div>
+                    <span class="text-[11px] font-semibold uppercase tracking-[0.06em] text-[#DC2626] font-mono-num">
+                        HTTP 403 &middot; PostgreSQL DCL Enforcement
+                    </span>
+                    <h2 class="font-display text-base font-bold text-[#09090B] mt-0.5">
+                        Operación bloqueada por privilegios
+                    </h2>
+                </div>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="bg-[#FEF2F2] border border-red-200 rounded-lg p-3.5 text-[#991B1B] text-[13px] font-medium leading-relaxed">
+                    Acceso denegado por PostgreSQL (REVOKE): el rol activo no tiene permisos para esta operación.
+                </div>
+                <div class="text-xs text-[#52525B] space-y-1.5 bg-[#FAFAFA] p-3.5 rounded-lg border border-[#E4E4E7] font-mono-num">
+                    <p><span class="font-semibold text-[#09090B]">Rol activo:</span> <span id="dcl-modal-role"></span></p>
+                    <p><span class="font-semibold text-[#09090B]">Endpoint:</span> <span id="dcl-modal-endpoint"></span></p>
+                    <p><span class="font-semibold text-[#09090B]">Respuesta PG:</span> <span id="dcl-modal-detail" class="text-[#DC2626] break-all"></span></p>
+                </div>
+                <div class="flex flex-wrap justify-end gap-2 pt-1">
+                    <button id="dcl-modal-close" type="button" class="btn-secondary px-4 py-2 text-xs">
+                        Entendido
+                    </button>
+                    <button id="dcl-modal-switch-admin" type="button" class="btn-primary px-4 py-2 text-xs inline-flex items-center gap-1.5">
+                        <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
+                        <span>Cambiar a rol_admin</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal genérico para edición y detalle -->
+    <div id="generic-modal"
+         class="fixed inset-0 z-50 hidden items-center justify-center bg-zinc-950/45 backdrop-blur-[2px] p-4">
+        <div class="bg-white rounded-[10px] max-w-2xl w-full border border-[#E4E4E7] shadow-lg overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="px-6 py-4 border-b border-[#E4E4E7] flex items-center justify-between bg-[#FAFAFA]">
+                <h3 id="generic-modal-title" class="font-display text-sm font-bold text-[#09090B]"></h3>
+                <button id="generic-modal-close" type="button"
+                        class="text-[#71717A] hover:text-[#09090B] p-1 rounded-md hover:bg-zinc-200/60 transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div id="generic-modal-body" class="p-6 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- Notificaciones Toast discretas -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+
+    <script type="module" src="./js/app.js"></script>
+</body>
+</html>

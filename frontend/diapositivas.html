@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proyecto Final de Bases de Datos — TechCore Store</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg: #09090B;
+            --card: #111318;
+            --panel: #18181B;
+            --ide-head: #161B22;
+            --border: #27272A;
+            --text: #F4F4F5;
+            --muted: #A1A1AA;
+            --emerald: #10B981;
+            --cyan: #38BDF8;
+            --amber: #F59E0B;
+            --red: #EF4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        code, pre, .mono {
+            font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Barra superior fija */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(9, 9, 11, 0.94);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .progress-track {
+            height: 2px;
+            background: #18181B;
+            width: 100%;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cyan), var(--emerald));
+            transition: width 180ms ease;
+        }
+
+        .topbar-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 10px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cyan);
+        }
+
+        .brand-title {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+
+        .brand-sub {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .topbar-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            color: var(--text);
+            transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+        }
+
+        .btn:hover {
+            background: #222228;
+            border-color: #3F3F46;
+        }
+
+        .btn-cyan {
+            background: rgba(56, 189, 248, 0.12);
+            border-color: rgba(56, 189, 248, 0.35);
+            color: var(--cyan);
+        }
+        .btn-cyan:hover {
+            background: rgba(56, 189, 248, 0.2);
+        }
+
+        .btn-emerald {
+            background: var(--emerald);
+            border-color: var(--emerald);
+            color: #052E16;
+            font-weight: 700;
+        }
+        .btn-emerald:hover {
+            background: #059669;
+            border-color: #059669;
+        }
+
+        .btn-amber {
+            background: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.38);
+            color: var(--amber);
+        }
+        .btn-amber:hover {
+            background: rgba(245, 158, 11, 0.22);
+        }
+
+        .slide-counter {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+
+        /* Cajón desplegable de guion */
+        .script-drawer {
+            display: none;
+            max-width: 1280px;
+            margin: 14px auto 0;
+            padding: 0 24px;
+            width: 100%;
+        }
+
+        .script-drawer.open {
+            display: block;
+            animation: slideFade 160ms ease-out;
+        }
+
+        .script-box {
+            background: #14120C;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            border-left: 4px solid var(--amber);
+            border-radius: 10px;
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .script-head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .script-speaker {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--amber);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .script-text {
+            font-size: 13px;
+            line-height: 1.55;
+            color: #FDE68A;
+            white-space: pre-line;
+        }
+
+        /* Lienzo de diapositivas */
+        .deck-main {
+            flex: 1;
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px 24px 88px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            display: none;
+            flex-direction: column;
+            gap: 18px;
+            animation: slideFade 180ms ease-out;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes slideFade {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .slide-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 16px;
+        }
+
+        .slide-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--cyan);
+            margin-bottom: 6px;
+        }
+
+        .slide-title {
+            font-size: clamp(22px, 2.6vw, 30px);
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            color: var(--text);
+            line-height: 1.2;
+        }
+
+        .slide-desc {
+            font-size: 13.5px;
+            color: var(--muted);
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .asymmetric-split {
+            display: grid;
+            grid-template-columns: 1.05fr 1.25fr;
+            gap: 16px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .grid-5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .grid-3 { grid-template-columns: 1fr; }
+            .grid-2, .asymmetric-split { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 640px) {
+            .grid-5 { grid-template-columns: 1fr; }
+            .topbar-inner, .deck-main { padding-left: 14px; padding-right: 14px; }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+        }
+
+        .badge-emerald { background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.35); color: var(--emerald); }
+        .badge-cyan { background: rgba(56, 189, 248, 0.12); border-color: rgba(56, 189, 248, 0.35); color: var(--cyan); }
+        .badge-amber { background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.35); color: var(--amber); }
+        .badge-red { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.35); color: var(--red); }
+
+        .list-clean {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .list-clean li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .inline-code {
+            background: #1F242D;
+            border: 1px solid #2E3440;
+            color: var(--text);
+            padding: 1px 6px;
+            border-radius: 5px;
+            font-size: 11.5px;
+        }
+
+        /* Bloques tipo IDE */
+        .ide-window {
+            background: #0D1117;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .ide-header {
+            background: var(--ide-head);
+            border-bottom: 1px solid var(--border);
+            padding: 9px 14px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .ide-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .ide-dots {
+            display: inline-flex;
+            gap: 5px;
+        }
+
+        .ide-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+        }
+
+        .ide-body {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            max-height: 365px;
+            overflow: auto;
+            font-size: 11.5px;
+            line-height: 1.6;
+        }
+
+        .ide-gutter {
+            user-select: none;
+            text-align: right;
+            padding: 12px 10px;
+            color: #52525B;
+            background: #0B0F14;
+            border-right: 1px solid #1F242C;
+            white-space: pre;
+        }
+
+        .ide-pre {
+            margin: 0;
+            padding: 12px 14px;
+            background: transparent !important;
+        }
+
+        .ide-pre code.hljs {
+            background: transparent !important;
+            padding: 0 !important;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            line-height: 1.6;
+        }
+
+        /* Pestañas internas PL/pgSQL */
+        .tab-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .inner-tab-btn {
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            color: var(--muted);
+            transition: all 150ms ease;
+        }
+
+        .inner-tab-btn.active {
+            background: rgba(56, 189, 248, 0.14);
+            border-color: rgba(56, 189, 248, 0.45);
+            color: var(--cyan);
+        }
+
+        .inner-panel { display: none; }
+        .inner-panel.active { display: block; }
+
+        /* Visor Mermaid */
+        .mermaid-viewport {
+            background: #0B0D12;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            overflow: auto;
+            max-height: 390px;
+        }
+
+        .mermaid-stage {
+            transform-origin: top left;
+            transition: transform 150ms ease;
+        }
+
+        /* Barra inferior fija de navegación */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(9, 9, 11, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border);
+            padding: 10px 24px;
+        }
+
+        .bottom-nav-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .slide-dots {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow-x: auto;
+        }
+
+        .dot-btn {
+            padding: 5px 10px;
+            border-radius: 7px;
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--muted);
+            transition: all 150ms ease;
+        }
+
+        .dot-btn.active {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+
+        .portada-hero {
+            background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.08), transparent 45%),
+                        radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.06), transparent 45%),
+                        var(--card);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra superior fija -->
+    <header class="topbar">
+        <div class="progress-track">
+            <div id="progress-fill" class="progress-fill" style="width: 12.5%;"></div>
+        </div>
+        <div class="topbar-inner">
+            <div class="brand">
+                <div class="brand-mark">
+                    <i data-lucide="cpu" style="width:17px;height:17px;"></i>
+                </div>
+                <div>
+                    <div class="brand-title">Proyecto Final de Bases de Datos — TechCore Store</div>
+                    <div class="brand-sub">Presentación Técnica &middot; PostgreSQL 16 + FastAPI + Docker</div>
+                </div>
+            </div>
+
+            <div class="topbar-actions">
+                <span id="slide-counter" class="slide-counter mono">01 / 08</span>
+
+                <button type="button" id="toggle-script-btn" class="btn btn-amber">
+                    <i data-lucide="mic" style="width:14px;height:14px;"></i>
+                    <span>Ver Guion del Expositor (G)</span>
+                </button>
+
+                <a href="./requisitos.html" target="_blank" rel="noopener noreferrer" class="btn btn-cyan">
+                    <i data-lucide="file-code-2" style="width:14px;height:14px;"></i>
+                    <span>Ver Mapa de Código y Requisitos</span>
+                </a>
+
+                <a href="./index.html" target="_blank" rel="noopener noreferrer" class="btn btn-emerald">
+                    <i data-lucide="play" style="width:14px;height:14px;"></i>
+                    <span>Abrir Sistema TechCore en Vivo</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Guion del Expositor desplegable por lámina (tecla G o clic) -->
+    <section id="script-drawer" class="script-drawer">
+        <div class="script-box">
+            <div class="script-head">
+                <span id="script-speaker" class="script-speaker">
+                    <i data-lucide="user-check" style="width:14px;height:14px;"></i>
+                    <span>Expositor</span>
+                </span>
+                <span class="mono" style="font-size:11px;color:#A1A1AA;">Atajo: tecla G para mostrar / ocultar</span>
+            </div>
+            <p id="script-text" class="script-text"></p>
+        </div>
+    </section>
+
+    <!-- Contenedor principal de Diapositivas -->
+    <main class="deck-main">
+
+        <!-- DIAPOSITIVA 1: Portada y Equipo -->
+        <section class="slide active" data-slide="1">
+            <div class="card portada-hero" style="display:flex;flex-direction:column;gap:20px;">
+                <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;">
+                    <span class="badge badge-cyan mono">
+                        <i data-lucide="calendar" style="width:13px;height:13px;"></i>
+                        26/11/2026 &middot; Salón SDU11 Bloque J
+                    </span>
+                    <span class="badge badge-emerald mono">
+                        <i data-lucide="check-circle-2" style="width:13px;height:13px;"></i>
+                        Arquitectura Distribuida 100% Operativa
+                    </span>
+                </div>
+
+                <div>
+                    <h1 style="font-size:clamp(26px,3.8vw,40px);font-weight:800;letter-spacing:-0.03em;line-height:1.12;color:#F4F4F5;">
+                        Proyecto Final de Bases de Datos — TechCore Store
+                    </h1>
+                    <p style="font-size:15px;color:#A1A1AA;margin-top:10px;max-width:840px;line-height:1.55;">
+                        Sistema de Gestión Comercial, Inventario y Ventas de Tecnología desarrollado con <strong style="color:#F4F4F5;">PostgreSQL 16</strong> (PL/pgSQL, Triggers, Vistas y DCL), <strong style="color:#F4F4F5;">2 Microservicios FastAPI + psycopg v3</strong> (sin ORM), <strong style="color:#F4F4F5;">Frontend SPA</strong> y orquestación completa en <strong style="color:#F4F4F5;">Docker Compose</strong>.
+                    </p>
+                </div>
+
+                <div style="border-top:1px solid #27272A;padding-top:18px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                        <span class="mono" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#A1A1AA;">
+                            Distribución de Exposición (5 Integrantes &middot; ~2 min c/u)
+                        </span>
+                        <span class="mono" style="font-size:11px;color:#38BDF8;">Tiempo estimado total: 10 minutos</span>
+                    </div>
+
+                    <div class="grid-5">
+                        <div class="panel" style="border-color:rgba(56,189,248,0.45);background:rgba(56,189,248,0.06);">
+                            <span class="badge badge-cyan mono" style="margin-bottom:8px;">Bloque 1 &middot; Apertura</span>
+                            <h3 style="font-size:14px;font-weight:700;color:#F4F4F5;">Brayan Steveen Sandoval Quiroz</h3>
+                            <p style="font-size:12px;color:#A1A1AA;margin-top:6px;line-height:1.45;">
+                                Contexto TechCore Store, Infraestructura Docker (<code>techcore_net</code>), Modelo MERE e índices, y CRUD de Inventario.
+                            </p>
+                        </div>
+
+                        <div class="panel">
+                            <span class="badge badge-amber mono" style="margin-bottom:8px;">Bloque 2</span>
+                            <h3 style="font-size:14px;font-weight:700;color:#F4F4F5;">Yoinner Jesus Gandara Garcia</h3>
+                            <p style="font-size:12px;color:#A1A1AA;margin-top:6px;line-height:1.45;">
+                                Caso de Uso (<code>CU-01</code>) y Control Transaccional ACID (<code>BEGIN / COMMIT / ROLLBACK</code>).
+                            </p>
+                        </div>
+
+                        <div class="panel">
+                            <span class="badge badge-emerald mono" style="margin-bottom:8px;">Bloque 3</span>
+                            <h3 style="font-size:14px;font-weight:700;color:#F4F4F5;">Juan Camilo Diaz Granados Amaya</h3>
+                            <p style="font-size:12px;color:#A1A1AA;margin-top:6px;line-height:1.45;">
+                                Funciones PL/pgSQL (escalar, tabla y agregada), Procedimientos Almacenados (<code>CALL</code>) y Vistas con <code>JOIN</code>.
+                            </p>
+                        </div>
+
+                        <div class="panel">
+                            <span class="badge badge-cyan mono" style="margin-bottom:8px;">Bloque 4</span>
+                            <h3 style="font-size:14px;font-weight:700;color:#F4F4F5;">Ana Catalina Torres Oñate</h3>
+                            <p style="font-size:12px;color:#A1A1AA;margin-top:6px;line-height:1.45;">
+                                Triggers de Auditoría Automática (<code>fn_auditar_cambios</code>) y Logs en Vivo (<code>auditoria_logs</code>).
+                            </p>
+                        </div>
+
+                        <div class="panel">
+                            <span class="badge badge-amber mono" style="margin-bottom:8px;">Bloque 5 &middot; Cierre</span>
+                            <h3 style="font-size:14px;font-weight:700;color:#F4F4F5;">Manuel Alfredo Gonzalez Castaño</h3>
+                            <p style="font-size:12px;color:#A1A1AA;margin-top:6px;line-height:1.45;">
+                                Microservicios (<code>:8001</code> / <code>:8002</code>) y Seguridad DCL (<code>GRANT / REVOKE</code>, <code>SET ROLE</code> y bloqueo <code>403</code>).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA 2: Caso de Uso CU-01 y Alcance -->
+        <section class="slide" data-slide="2">
+            <div class="card" style="display:flex;flex-direction:column;gap:18px;">
+                <div class="slide-header">
+                    <div>
+                        <span class="slide-kicker mono">
+                            <i data-lucide="briefcase" style="width:13px;height:13px;"></i>
+                            Diapositiva 02 &middot; Caso de Uso Principal (CU-01)
+                        </span>
+                        <h2 class="slide-title">Procesamiento de Ventas en Lote, Inventario, Auditoría y DCL</h2>
+                        <p class="slide-desc">
+                            TechCore Store comercializa hardware empresarial (computadores, monitores y periféricos) garantizando consistencia de stock, trazabilidad por trigger y separación estricta de privilegios.
+                        </p>
+                    </div>
+                    <a href="./requisitos.html" target="_blank" rel="noopener noreferrer" class="btn btn-cyan">
+                        <i data-lucide="external-link" style="width:14px;height:14px;"></i>
+                        <span>Ver CU-01 en Requisitos</span>
+                    </a>
+                </div>
+
+                <div class="grid-2">
+                    <div class="panel" style="border-left:3px solid var(--emerald);">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                            <strong class="mono" style="font-size:14px;color:var(--emerald);">rol_admin (Administrador)</strong>
+                            <span class="badge badge-emerald mono">Acceso Total</span>
+                        </div>
+                        <ul class="list-clean">
+                            <li><i data-lucide="check" style="width:14px;height:14px;color:var(--emerald);flex-shrink:0;margin-top:2px;"></i><span><code>ALL PRIVILEGES</code> sobre las 7 tablas y todas las secuencias en PostgreSQL.</span></li>
+                            <li><i data-lucide="check" style="width:14px;height:14px;color:var(--emerald);flex-shrink:0;margin-top:2px;"></i><span>Gestiona usuarios, crea/edita categorías y ejecuta <code>DELETE</code> cuando corresponde.</span></li>
+                            <li><i data-lucide="check" style="width:14px;height:14px;color:var(--emerald);flex-shrink:0;margin-top:2px;"></i><span>Acceso exclusivo de lectura a <code>auditoria_logs</code> y al resumen agrupado por trigger.</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="panel" style="border-left:3px solid var(--amber);">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                            <strong class="mono" style="font-size:14px;color:var(--amber);">rol_operador (Operador de Caja)</strong>
+                            <span class="badge badge-amber mono">Acceso Restringido</span>
+                        </div>
+                        <ul class="list-clean">
+                            <li><i data-lucide="check" style="width:14px;height:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i><span><code>SELECT, INSERT, UPDATE</code> en <code>productos</code>, <code>clientes</code>, <code>pedidos</code> y <code>detalle_pedidos</code>.</span></li>
+                            <li><i data-lucide="check" style="width:14px;height:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i><span><code>EXECUTE</code> en funciones/procedimientos y <code>SELECT</code> en vistas analíticas <code>vw_*</code>.</span></li>
+                            <li><i data-lucide="shield-ban" style="width:14px;height:14px;color:var(--red);flex-shrink:0;margin-top:2px;"></i><span><strong>Bloqueado (<code>403</code>):</strong> sin <code>DELETE</code> y sin acceso directo a <code>auditoria_logs</code>.</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grid-3">
+                    <div class="panel">
+                        <span class="badge badge-cyan mono" style="margin-bottom:8px;">Pilar 1 &middot; CRUD</span>
+                        <p style="font-size:13px;font-weight:700;">5 Entidades Completas</p>
+                        <p style="font-size:12px;color:var(--muted);margin-top:4px;"><code>usuarios</code>, <code>productos</code>, <code>categorias</code>, <code>clientes</code> y <code>pedidos</code> con códigos HTTP <code>200/201/400/403/404/409</code>.</p>
+                    </div>
+                    <div class="panel">
+                        <span class="badge badge-emerald mono" style="margin-bottom:8px;">Pilar 2 &middot; Transacciones</span>
+                        <p style="font-size:13px;font-weight:700;">ACID + Bloqueo FOR UPDATE</p>
+                        <p style="font-size:12px;color:var(--muted);margin-top:4px;">Pedido compuesto en lote con <code>BEGIN</code>, <code>COMMIT</code> y <code>ROLLBACK</code> explícito ante stock insuficiente.</p>
+                    </div>
+                    <div class="panel">
+                        <span class="badge badge-amber mono" style="margin-bottom:8px;">Pilar 3 &middot; Logs y Reportes</span>
+                        <p style="font-size:13px;font-weight:700;">Triggers + Vistas JOIN</p>
+                        <p style="font-size:12px;color:var(--muted);margin-top:4px;">Bitácora automática <code>OLD/NEW</code> en JSONB y reportes en vivo con <code>vw_*</code> y <code>fn_promedio_ponderado</code>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA 3: MERE -->
+        <section class="slide" data-slide="3">
+            <div class="card" style="display:flex;flex-direction:column;gap:16px;">
+                <div class="slide-header">
+                    <div>
+                        <span class="slide-kicker mono">
+                            <i data-lucide="database" style="width:13px;height:13px;"></i>
+                            Diapositiva 03 &middot; Modelo Entidad-Relación Extendido (MERE)
+                        </span>
+                        <h2 class="slide-title">Esquema Relacional, Especializaciones Disjuntas e Índices</h2>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                        <div class="btn" style="padding:4px 8px;gap:4px;">
+                            <button type="button" data-zoom="out" style="background:none;border:none;color:var(--text);cursor:pointer;padding:2px 6px;" class="mono">-</button>
+                            <span id="mere-zoom-val" class="mono" style="font-size:11px;color:var(--muted);padding:0 4px;">100%</span>
+                            <button type="button" data-zoom="in" style="background:none;border:none;color:var(--text);cursor:pointer;padding:2px 6px;" class="mono">+</button>
+                            <button type="button" data-zoom="reset" style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:2px 6px;font-size:11px;" class="mono">Reset</button>
+                        </div>
+                        <a href="./requisitos.html" target="_blank" rel="noopener noreferrer" class="btn btn-cyan">
+                            <span>Ver Índices SQL</span>
+                            <i data-lucide="external-link" style="width:13px;height:13px;"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mermaid-viewport">
+                    <div id="mere-zoom-stage" class="mermaid-stage">
+                        <div class="mermaid-target" id="mmd-mere" data-mermaid-rendered="false">
+                            <script type="text/plain">erDiagram
+    CATEGORIAS ||--o{ PRODUCTOS : "clasifica (0..N)"
+    USUARIOS ||--o{ PEDIDOS : "gestiona (0..N)"
+    CLIENTES ||--o{ PEDIDOS : "realiza (0..N)"
+    PRODUCTOS ||--o{ PEDIDOS : "referencia_cabecera (0..N)"
+    PEDIDOS ||--|{ DETALLE_PEDIDOS : "contiene (1..N)"
+    PRODUCTOS ||--o{ DETALLE_PEDIDOS : "incluye_linea (0..N)"
+
+    CATEGORIAS {
+        serial id PK
+        varchar nombre UK
+        text descripcion
+        boolean activo
+        timestamp creado_en
+    }
+
+    USUARIOS {
+        serial id PK
+        varchar nombre
+        varchar email UK
+        varchar password_hash
+        varchar rol "CHECK: rol_admin | rol_operador"
+        boolean activo
+        timestamp creado_en
+    }
+
+    CLIENTES {
+        serial id PK
+        varchar tipo_cliente "CHECK: NATURAL | JURIDICA"
+        varchar documento UK
+        varchar nombre_razon_social
+        varchar email
+        varchar telefono
+        timestamp creado_en
+    }
+
+    PRODUCTOS {
+        serial id PK
+        varchar codigo UK
+        varchar nombre
+        numeric precio_unitario "CHECK >= 0"
+        integer stock "CHECK >= 0"
+        integer categoria_id FK "NULLABLE"
+        timestamp creado_en
+    }
+
+    PEDIDOS {
+        serial id PK
+        integer usuario_id FK
+        integer producto_id FK
+        integer cliente_id FK "NULLABLE"
+        integer cantidad "CHECK > 0"
+        numeric subtotal "CHECK >= 0"
+        numeric descuento "CHECK >= 0"
+        numeric total "CHECK >= 0"
+        varchar estado
+        timestamp fecha_pedido
+    }
+
+    DETALLE_PEDIDOS {
+        serial id PK
+        integer pedido_id FK
+        integer producto_id FK
+        integer cantidad "CHECK > 0"
+        numeric precio_unitario "CHECK >= 0"
+        numeric subtotal_linea "CHECK >= 0"
+    }
+
+    AUDITORIA_LOGS {
+        serial id PK
+        varchar tabla_afectada
+        varchar operacion
+        varchar usuario_db
+        text detalle
+        timestamp fecha_evento
+    }</script>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-3">
+                    <div class="panel">
+                        <p style="font-size:12.5px;font-weight:700;color:var(--cyan);">Normalización N:M (detalle_pedidos)</p>
+                        <p style="font-size:12px;color:var(--muted);margin-top:4px;">Desacopla múltiples productos por pedido guardando el precio histórico de venta (<code>subtotal_linea</code>) con <code>ON DELETE CASCADE</code>.</p>
+                    </div>
+                    <div class="panel">
+                        <p style="font-size:12.5px;font-weight:700;color:var(--emerald);">Especialización Clientes (NATURAL / JURIDICA)</p>
+                        <p style="font-size:12px;color:var(--muted);margin-top:4px;">Jerarquía disjunta total mediante discriminador <code>CHECK (tipo_cliente IN ('NATURAL','JURIDICA'))</code> y documento único.</p>
+                    </div>
+                    <div class="panel">
+                        <p style="font-size:12.5px;font-weight:700;color:var(--amber);">Roles Disjuntos + 8 Índices Secundarios</p>
+                        <p style="font-size:12px;color:var(--muted);margin-top:4px;"><code>USUARIOS</code> se especializa en <code>rol_admin</code> y <code>rol_operador</code>; índices sobre todas las FKs, fechas y bitácora.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA 4: Docker y Microservicios -->
+        <section class="slide" data-slide="4">
+            <div class="card" style="display:flex;flex-direction:column;gap:16px;">
+                <div class="slide-header">
+                    <div>
+                        <span class="slide-kicker mono">
+                            <i data-lucide="box" style="width:13px;height:13px;"></i>
+                            Diapositiva 04 &middot; Infraestructura Docker y Microservicios
+                        </span>
+                        <h2 class="slide-title">4 Contenedores Aislados en Red <code>techcore_net</code> (Modo Offline / Supabase)</h2>
+                    </div>
+                    <a href="./index.html" target="_blank" rel="noopener noreferrer" class="btn btn-emerald">
+                        <i data-lucide="play" style="width:13px;height:13px;"></i>
+                        <span>Ir a App (:3000)</span>
+                    </a>
+                </div>
+
+                <div class="asymmetric-split">
+                    <div style="display:flex;flex-direction:column;gap:12px;">
+                        <div class="mermaid-viewport" style="max-height:240px;">
+                            <div class="mermaid-target" id="mmd-docker" data-mermaid-rendered="false">
+                                <script type="text/plain">flowchart LR
+    B["Navegador"] -->|":3000"| FE["frontend (nginx)"]
+    B -->|":8001"| MS1["ms-usuarios-seguridad"]
+    B -->|":8002"| MS2["ms-operaciones-reportes"]
+    MS1 -->|"techcore_net :5432"| PG[("postgres_db")]
+    MS2 -->|"techcore_net :5432"| PG</script>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <p style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:8px;">Puntos clave de arquitectura</p>
+                            <ul class="list-clean" style="font-size:12px;">
+                                <li><i data-lucide="heart-pulse" style="width:14px;height:14px;color:var(--emerald);flex-shrink:0;margin-top:2px;"></i><span><code>postgres_db</code> ejecuta <code>init.sql</code> al arranque y expone <code>healthcheck</code> con <code>pg_isready</code>.</span></li>
+                                <li><i data-lucide="layers" style="width:14px;height:14px;color:var(--cyan);flex-shrink:0;margin-top:2px;"></i><span>Microservicios Python 3.11 (<code>core</code>, <code>schemas</code>, <code>services</code>, <code>routers</code>) con SQL directo vía <code>psycopg</code> v3 sin ORM.</span></li>
+                                <li><i data-lucide="toggle-right" style="width:14px;height:14px;color:var(--amber);flex-shrink:0;margin-top:2px;"></i><span><code>DB_SSLMODE</code> alterna entre <code>disable</code> (Docker offline) y <code>require</code> (Supabase nube).</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="code-slot" data-file="docker-compose.yml" data-lines="Líneas 1–78" data-start="1" data-lang="yaml">
+                        <script type="text/plain">services:
+  postgres_db:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: techcore_db
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d techcore_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - techcore_net
+
+  ms-usuarios-seguridad:
+    build:
+      context: ./ms-usuarios-seguridad
+      dockerfile: Dockerfile
+    container_name: ms-usuarios-seguridad
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres_db:5432/techcore_db
+      DB_SSLMODE: disable
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    networks:
+      - techcore_net
+
+  ms-operaciones-reportes:
+    build:
+      context: ./ms-operaciones-reportes
+      dockerfile: Dockerfile
+    container_name: ms-operaciones-reportes
+    restart: unless-stopped
+    ports:
+      - "8002:8002"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres_db:5432/techcore_db
+      DB_SSLMODE: disable
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    networks:
+      - techcore_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: techcore_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - ms-usuarios-seguridad
+      - ms-operaciones-reportes
+    networks:
+      - techcore_net</script>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA 5: Objetos PL/pgSQL -->
+        <section class="slide" data-slide="5">
+            <div class="card" style="display:flex;flex-direction:column;gap:14px;">
+                <div class="slide-header">
+                    <div>
+                        <span class="slide-kicker mono">
+                            <i data-lucide="code-2" style="width:13px;height:13px;"></i>
+                            Diapositiva 05 &middot; Lógica Programada en PostgreSQL (database/init.sql)
+                        </span>
+                        <h2 class="slide-title">Triggers, Funciones (Escalar, Tabla, Agregada), Procedimientos y Vistas</h2>
+                    </div>
+                    <a href="./requisitos.html" target="_blank" rel="noopener noreferrer" class="btn btn-cyan">
+                        <span>Explorar en Mapa</span>
+                        <i data-lucide="external-link" style="width:13px;height:13px;"></i>
+                    </a>
+                </div>
+
+                <div class="inner-tab-group">
+                    <div class="tab-bar">
+                        <button type="button" data-tab-btn="pl-trigger" class="inner-tab-btn active mono">fn_auditar_cambios (Trigger)</button>
+                        <button type="button" data-tab-btn="pl-escalar" class="inner-tab-btn mono">fn_calcular_descuento (Escalar)</button>
+                        <button type="button" data-tab-btn="pl-tabla" class="inner-tab-btn mono">fn_reporte_ventas (Tabla)</button>
+                        <button type="button" data-tab-btn="pl-agg" class="inner-tab-btn mono">fn_promedio_ponderado (Agregada)</button>
+                        <button type="button" data-tab-btn="pl-proc" class="inner-tab-btn mono">proc_cancelar_pedido (CALL)</button>
+                        <button type="button" data-tab-btn="pl-vistas" class="inner-tab-btn mono">Vistas vw_* (JOIN)</button>
+                    </div>
+
+                    <div data-tab-panel="pl-trigger" class="inner-panel active">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 360–423" data-start="360" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE FUNCTION fn_auditar_cambios()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_rol_activo TEXT;
+    v_old JSONB := NULL;
+    v_new JSONB := NULL;
+    v_detalle TEXT;
+BEGIN
+    v_rol_activo := COALESCE(NULLIF(current_setting('role', true), 'none'), CURRENT_USER);
+
+    IF TG_OP IN ('UPDATE', 'DELETE') THEN
+        v_old := to_jsonb(OLD);
+        IF TG_TABLE_NAME = 'usuarios' THEN
+            v_old := v_old - 'password_hash';
+        END IF;
+    END IF;
+
+    IF TG_OP IN ('INSERT', 'UPDATE') THEN
+        v_new := to_jsonb(NEW);
+        IF TG_TABLE_NAME = 'usuarios' THEN
+            v_new := v_new - 'password_hash';
+        END IF;
+    END IF;
+
+    v_detalle := jsonb_build_object('old', v_old, 'new', v_new)::TEXT;
+
+    INSERT INTO auditoria_logs (tabla_afectada, operacion, usuario_db, detalle)
+    VALUES (TG_TABLE_NAME, TG_OP, v_rol_activo, v_detalle);
+
+    RETURN COALESCE(NEW, OLD);
+END;
+$$;
+
+CREATE TRIGGER trg_auditoria_pedidos
+    AFTER INSERT OR UPDATE OR DELETE ON pedidos
+    FOR EACH ROW EXECUTE FUNCTION fn_auditar_cambios();</script>
+                        </div>
+                    </div>
+
+                    <div data-tab-panel="pl-escalar" class="inner-panel">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 117–141" data-start="117" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE FUNCTION fn_calcular_descuento(
+    p_subtotal NUMERIC,
+    p_cantidad INTEGER
+)
+RETURNS NUMERIC
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_porcentaje NUMERIC := 0.00;
+BEGIN
+    IF p_subtotal IS NULL OR p_subtotal <= 0 OR p_cantidad IS NULL OR p_cantidad <= 0 THEN
+        RETURN 0.00;
+    END IF;
+
+    IF p_cantidad >= 10 THEN
+        v_porcentaje := 0.10;
+    ELSIF p_cantidad >= 5 THEN
+        v_porcentaje := 0.05;
+    ELSE
+        v_porcentaje := 0.00;
+    END IF;
+
+    RETURN ROUND(p_subtotal * v_porcentaje, 2);
+END;
+$$;</script>
+                        </div>
+                    </div>
+
+                    <div data-tab-panel="pl-tabla" class="inner-panel">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 273–311" data-start="273" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE FUNCTION fn_reporte_ventas(
+    p_fecha_inicio TIMESTAMP DEFAULT NULL,
+    p_fecha_fin TIMESTAMP DEFAULT NULL
+)
+RETURNS TABLE (
+    pedido_id INTEGER,
+    cliente_nombre VARCHAR,
+    producto_codigo VARCHAR,
+    producto_nombre VARCHAR,
+    cantidad INTEGER,
+    subtotal NUMERIC,
+    descuento NUMERIC,
+    total NUMERIC,
+    estado VARCHAR,
+    fecha_pedido TIMESTAMP
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        pe.id AS pedido_id,
+        u.nombre AS cliente_nombre,
+        pr.codigo AS producto_codigo,
+        pr.nombre AS producto_nombre,
+        pe.cantidad,
+        pe.subtotal,
+        pe.descuento,
+        pe.total,
+        pe.estado,
+        pe.fecha_pedido
+    FROM pedidos pe
+    INNER JOIN usuarios u ON u.id = pe.usuario_id
+    INNER JOIN productos pr ON pr.id = pe.producto_id
+    WHERE (p_fecha_inicio IS NULL OR pe.fecha_pedido >= p_fecha_inicio)
+      AND (p_fecha_fin IS NULL OR pe.fecha_pedido <= p_fecha_fin)
+    ORDER BY pe.fecha_pedido DESC, pe.id DESC;
+END;
+$$;</script>
+                        </div>
+                    </div>
+
+                    <div data-tab-panel="pl-agg" class="inner-panel">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 314–355" data-start="314" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE FUNCTION fn_promedio_ponderado_sfunc(
+    p_estado NUMERIC[],
+    p_valor NUMERIC,
+    p_peso NUMERIC
+)
+RETURNS NUMERIC[]
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF p_valor IS NULL OR p_peso IS NULL OR p_peso <= 0 THEN
+        RETURN p_estado;
+    END IF;
+
+    RETURN ARRAY[
+        p_estado[1] + (p_valor * p_peso),
+        p_estado[2] + p_peso
+    ];
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION fn_promedio_ponderado_ffunc(p_estado NUMERIC[])
+RETURNS NUMERIC
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF p_estado IS NULL OR p_estado[2] IS NULL OR p_estado[2] = 0 THEN
+        RETURN 0.00;
+    END IF;
+    RETURN ROUND(p_estado[1] / p_estado[2], 2);
+END;
+$$;
+
+CREATE AGGREGATE fn_promedio_ponderado(NUMERIC, NUMERIC) (
+    SFUNC = fn_promedio_ponderado_sfunc,
+    STYPE = NUMERIC[],
+    FINALFUNC = fn_promedio_ponderado_ffunc,
+    INITCOND = '{0,0}'
+);</script>
+                        </div>
+                    </div>
+
+                    <div data-tab-panel="pl-proc" class="inner-panel">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 211–270" data-start="211" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE PROCEDURE proc_cancelar_pedido(
+    IN p_pedido_id INTEGER,
+    INOUT p_mensaje TEXT DEFAULT NULL
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_estado VARCHAR(30);
+    v_producto_id INTEGER;
+    v_cantidad INTEGER;
+    v_total_devuelto INTEGER := 0;
+    v_tiene_detalle BOOLEAN := FALSE;
+    v_linea RECORD;
+BEGIN
+    SELECT estado, producto_id, cantidad
+      INTO v_estado, v_producto_id, v_cantidad
+      FROM pedidos
+     WHERE id = p_pedido_id
+       FOR UPDATE;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'El pedido % no existe.', p_pedido_id;
+    END IF;
+
+    IF UPPER(v_estado) = 'CANCELADO' THEN
+        RAISE EXCEPTION 'El pedido % ya se encuentra cancelado.', p_pedido_id;
+    END IF;
+
+    UPDATE pedidos SET estado = 'CANCELADO' WHERE id = p_pedido_id;
+
+    FOR v_linea IN
+        SELECT producto_id, cantidad FROM detalle_pedidos WHERE pedido_id = p_pedido_id
+    LOOP
+        v_tiene_detalle := TRUE;
+        UPDATE productos SET stock = stock + v_linea.cantidad WHERE id = v_linea.producto_id;
+        v_total_devuelto := v_total_devuelto + v_linea.cantidad;
+    END LOOP;
+
+    IF NOT v_tiene_detalle THEN
+        UPDATE productos SET stock = stock + v_cantidad WHERE id = v_producto_id;
+        v_total_devuelto := v_cantidad;
+    END IF;
+
+    p_mensaje := FORMAT('Pedido #%s cancelado correctamente. Se devolvieron %s unidad(es) al inventario.',
+                        p_pedido_id, v_total_devuelto);
+END;
+$$;</script>
+                        </div>
+                    </div>
+
+                    <div data-tab-panel="pl-vistas" class="inner-panel">
+                        <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 428–490" data-start="428" data-lang="sql">
+                            <script type="text/plain">CREATE OR REPLACE VIEW vw_resumen_pedidos AS
+SELECT
+    pe.id AS pedido_id, pe.fecha_pedido, pe.estado,
+    u.id AS usuario_id, u.nombre AS usuario_nombre, u.email AS usuario_email,
+    cl.id AS cliente_id, cl.documento AS cliente_documento,
+    COALESCE(cl.nombre_razon_social, 'Cliente General') AS cliente_nombre,
+    pr.id AS producto_id, pr.codigo AS producto_codigo, pr.nombre AS producto_nombre,
+    COALESCE(cat.nombre, 'Sin categoría') AS categoria_nombre,
+    pe.cantidad, pe.subtotal, pe.descuento, pe.total
+FROM pedidos pe
+INNER JOIN usuarios u ON u.id = pe.usuario_id
+INNER JOIN productos pr ON pr.id = pe.producto_id
+LEFT JOIN categorias cat ON cat.id = pr.categoria_id
+LEFT JOIN clientes cl ON cl.id = pe.cliente_id;
+
+CREATE OR REPLACE VIEW vw_ventas_por_producto AS
+SELECT
+    pr.id AS producto_id, pr.codigo, pr.nombre AS producto_nombre,
+    COALESCE(cat.nombre, 'Sin categoría') AS categoria_nombre,
+    pr.precio_unitario, pr.stock AS stock_actual,
+    CASE
+        WHEN pr.stock = 0 THEN 'AGOTADO'
+        WHEN pr.stock <= 10 THEN 'STOCK_BAJO'
+        ELSE 'DISPONIBLE'
+    END AS estado_stock,
+    COUNT(pe.id)::INTEGER AS total_pedidos,
+    COALESCE(SUM(pe.cantidad), 0)::INTEGER AS unidades_vendidas,
+    COALESCE(SUM(pe.total), 0.00)::NUMERIC(12, 2) AS ingresos_totales
+FROM productos pr
+LEFT JOIN categorias cat ON cat.id = pr.categoria_id
+LEFT JOIN pedidos pe ON pe.producto_id = pr.id AND UPPER(pe.estado) <> 'CANCELADO'
+GROUP BY pr.id, pr.codigo, pr.nombre, cat.nombre, pr.precio_unitario, pr.stock;</script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA 6: Control Transaccional ACID -->
+        <section class="slide" data-slide="6">
+            <div class="card" style="display:flex;flex-direction:column;gap:16px;">
+                <div class="slide-header">
+                    <div>
+                        <span class="slide-kicker mono">
+                            <i data-lucide="git-commit-horizontal" style="width:13px;height:13px;"></i>
+                            Diapositiva 06 &middot; Atomicidad y Aislamiento (ACID)
+                        </span>
+                        <h2 class="slide-title">Transacción Explícita Multi-Paso: <code>BEGIN / COMMIT / ROLLBACK</code></h2>
+                    </div>
+                    <a href="./index.html" target="_blank" rel="noopener noreferrer" class="btn btn-emerald">
+                        <i data-lucide="play" style="width:13px;height:13px;"></i>
+                        <span>Probar Demo ROLLBACK</span>
+                    </a>
+                </div>
+
+                <div class="asymmetric-split">
+                    <div style="display:flex;flex-direction:column;gap:12px;">
+                        <div class="panel" style="border-left:3px solid var(--cyan);">
+                            <p style="font-size:13px;font-weight:700;color:var(--cyan);">1. Apertura Manual (<code>autocommit = True</code> + <code>BEGIN;</code>)</p>
+                            <p style="font-size:12px;color:var(--muted);margin-top:4px;">El backend abre la transacción en SQL directo, valida usuario/cliente e inserta la cabecera en <code>pedidos</code>.</p>
+                        </div>
+                        <div class="panel" style="border-left:3px solid var(--amber);">
+                            <p style="font-size:13px;font-weight:700;color:var(--amber);">2. Si el 2do producto no tiene stock suficiente</p>
+                            <p style="font-size:12px;color:var(--muted);margin-top:4px;">El 1er producto ya había sido descontado dentro de la transacción con <code>FOR UPDATE</code>. Al fallar el 2do ítem, el bloque <code>except</code> ejecuta <code>ROLLBACK;</code> y responde <code>HTTP 400</code>.</p>
+                        </div>
+                        <div class="panel" style="border-left:3px solid var(--emerald);">
+                            <p style="font-size:13px;font-weight:700;color:var(--emerald);">3. Resultado Garantizado en PostgreSQL</p>
+                            <p style="font-size:12px;color:var(--muted);margin-top:4px;">El stock del 1er producto vuelve intacto a su cantidad original, no queda cabecera huérfana ni detalles incompletos, y los triggers de esa transacción también se revierten.</p>
+                        </div>
+                    </div>
+
+                    <div class="code-slot" data-file="ms-operaciones-reportes/app/services/operaciones_service.py" data-lines="Líneas 506–646" data-start="506" data-lang="python">
+                        <script type="text/plain">    conn.autocommit = True
+    try:
+        with conn.cursor() as cur:
+            cur.execute("BEGIN;")
+            # ... validación de usuario, cliente y cabecera inicial en pedidos ...
+            for item in items:
+                producto = cur.execute(
+                    """
+                    SELECT id, codigo, precio_unitario, stock
+                      FROM productos
+                     WHERE id = %s
+                       FOR UPDATE;
+                    """,
+                    (item.producto_id,),
+                ).fetchone()
+                if not producto:
+                    raise ValueError(f"El producto {item.producto_id} no existe.")
+
+                if producto["stock"] < item.cantidad:
+                    raise ValueError(
+                        f"Stock insuficiente para producto {producto['codigo']} "
+                        f"(disponible: {producto['stock']}, solicitado: {item.cantidad}). "
+                        "Se ejecutó ROLLBACK completo de la transacción."
+                    )
+
+                cur.execute(
+                    "UPDATE productos SET stock = stock - %s WHERE id = %s;",
+                    (item.cantidad, item.producto_id),
+                )
+                cur.execute(
+                    """
+                    INSERT INTO detalle_pedidos (
+                        pedido_id, producto_id, cantidad, precio_unitario, subtotal_linea
+                    ) VALUES (%s, %s, %s, %s, %s);
+                    """,
+                    (pedido_id, item.producto_id, item.cantidad, producto["precio_unitario"], subtotal_linea),
+                )
+
+            desc_row = cur.execute(
+                "SELECT fn_calcular_descuento(%s, %s) AS descuento;",
+                (subtotal_total, cantidad_total),
+            ).fetchone()
+            # ... actualiza totales en pedidos ...
+            cur.execute("COMMIT;")
+
+        return {"pedido_id": pedido_id, "estado": cabecera["estado"], "total": total_final}
+    except (ValueError, RuntimeError, psycopg.Error) as exc:
+        try:
+            conn.execute("ROLLBACK;")
+        except Exception:
+            pass
+        raise _traducir_error_pg(exc, rol_db) from exc
+    finally:
+        conn.close()</script>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA 7: Seguridad DCL -->
+        <section class="slide" data-slide="7">
+            <div class="card" style="display:flex;flex-direction:column;gap:16px;">
+                <div class="slide-header">
+                    <div>
+                        <span class="slide-kicker mono">
+                            <i data-lucide="shield-alert" style="width:13px;height:13px;"></i>
+                            Diapositiva 07 &middot; Seguridad en el Motor (DCL)
+                        </span>
+                        <h2 class="slide-title"><code>GRANT / REVOKE</code> en PostgreSQL + <code>SET ROLE</code> por Sesión + HTTP <code>403</code></h2>
+                    </div>
+                    <a href="./index.html" target="_blank" rel="noopener noreferrer" class="btn btn-amber">
+                        <i data-lucide="shield-ban" style="width:13px;height:13px;"></i>
+                        <span>Probar Bloqueo 403</span>
+                    </a>
+                </div>
+
+                <div class="grid-2">
+                    <div class="code-slot" data-file="database/init.sql" data-lines="Líneas 529–554" data-start="529" data-lang="sql">
+                        <script type="text/plain">-- rol_operador:
+--   - SELECT en usuarios, categorias y todas las vistas vw_*
+--   - SELECT, INSERT, UPDATE en productos, clientes, pedidos y detalle_pedidos (sin DELETE)
+--   - Ningún acceso directo a auditoria_logs
+REVOKE ALL PRIVILEGES ON TABLE
+    usuarios, categorias, productos, clientes, pedidos, detalle_pedidos, auditoria_logs
+    FROM rol_operador;
+
+GRANT SELECT ON TABLE usuarios, categorias TO rol_operador;
+GRANT SELECT ON
+    vw_resumen_pedidos, vw_ventas_por_producto, vw_resumen_por_usuario
+    TO rol_operador;
+GRANT SELECT, INSERT, UPDATE ON TABLE
+    productos, clientes, pedidos, detalle_pedidos
+    TO rol_operador;
+REVOKE DELETE ON TABLE
+    usuarios, categorias, productos, clientes, pedidos, detalle_pedidos
+    FROM rol_operador;
+REVOKE ALL PRIVILEGES ON TABLE auditoria_logs FROM rol_operador;
+GRANT USAGE, SELECT ON SEQUENCE
+    productos_id_seq, clientes_id_seq, pedidos_id_seq, detalle_pedidos_id_seq
+    TO rol_operador;</script>
+                    </div>
+
+                    <div class="code-slot" data-file="ms-usuarios-seguridad/app/core/database.py & auth_service.py" data-lines="SET ROLE + 403" data-start="29" data-lang="python">
+                        <script type="text/plain">    sslmode = os.getenv("DB_SSLMODE", "require")
+    conn = psycopg.connect(database_url, sslmode=sslmode, row_factory=dict_row)
+    try:
+        conn.execute(sql.SQL("SET ROLE {}").format(sql.Identifier(rol)))
+        conn.commit()
+    except Exception:
+        conn.close()
+        raise
+    return conn
+
+# En servicios Python (auth_service.py / operaciones_service.py):
+    except psycopg.errors.InsufficientPrivilege as exc:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Permiso denegado en PostgreSQL para el rol '{rol_db}': {exc}",
+        ) from exc</script>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIAPOSITIVA 8: Ruta de Demo en Vivo -->
+        <section class="slide" data-slide="8">
+            <div class="card" style="display:flex;flex-direction:column;gap:18px;">
+                <div class="slide-header">
+                    <div>
+                        <span class="slide-kicker mono">
+                            <i data-lucide="play-circle" style="width:13px;height:13px;"></i>
+                            Diapositiva 08 &middot; Ruta de Demostración en Vivo
+                        </span>
+                        <h2 class="slide-title">5 Pasos en Vivo sobre TechCore Store (<code>./index.html</code>)</h2>
+                        <p class="slide-desc">Secuencia cronometrada de 5 bloques para demostrar todos los requisitos del proyecto final frente al profesor.</p>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <a href="./requisitos.html" target="_blank" rel="noopener noreferrer" class="btn btn-cyan">
+                            <i data-lucide="file-code-2" style="width:14px;height:14px;"></i>
+                            <span>Mapa de Código</span>
+                        </a>
+                        <a href="./index.html" target="_blank" rel="noopener noreferrer" class="btn btn-emerald">
+                            <i data-lucide="external-link" style="width:14px;height:14px;"></i>
+                            <span>Iniciar Demo en ./index.html</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid-5">
+                    <div class="panel" style="border-top:3px solid var(--cyan);">
+                        <span class="badge badge-cyan mono" style="margin-bottom:8px;">Paso 1 &middot; Bloque 1</span>
+                        <p style="font-size:13px;font-weight:700;">Brayan Steveen Sandoval Quiroz</p>
+                        <p style="font-size:12px;color:var(--muted);margin-top:6px;">Contexto, Docker e Inventario: entra a <em>Inventario y Categorías</em>, crea el producto <code>PROD-DEMO</code> y edita su stock.</p>
+                    </div>
+
+                    <div class="panel" style="border-top:3px solid var(--amber);">
+                        <span class="badge badge-amber mono" style="margin-bottom:8px;">Paso 2 &middot; Bloque 2</span>
+                        <p style="font-size:13px;font-weight:700;">Yoinner Jesus Gandara Garcia</p>
+                        <p style="font-size:12px;color:var(--muted);margin-top:6px;">Demo ACID en POS: pulsa <strong>"Simular fallo en 2do ítem para probar ROLLBACK"</strong>, comprueba stock intacto y registra un lote válido (<code>COMMIT</code>).</p>
+                    </div>
+
+                    <div class="panel" style="border-top:3px solid var(--emerald);">
+                        <span class="badge badge-emerald mono" style="margin-bottom:8px;">Paso 3 &middot; Bloque 3</span>
+                        <p style="font-size:13px;font-weight:700;">Juan Camilo Diaz Granados Amaya</p>
+                        <p style="font-size:12px;color:var(--muted);margin-top:6px;">Dashboard, Vistas y <code>CALL</code>: muestra <code>fn_promedio_ponderado</code>, vistas <code>vw_*</code>, <code>fn_reporte_ventas</code> y cancela un pedido (<code>proc_cancelar_pedido</code>).</p>
+                    </div>
+
+                    <div class="panel" style="border-top:3px solid var(--cyan);">
+                        <span class="badge badge-cyan mono" style="margin-bottom:8px;">Paso 4 &middot; Bloque 4</span>
+                        <p style="font-size:13px;font-weight:700;">Ana Catalina Torres Oñate</p>
+                        <p style="font-size:12px;color:var(--muted);margin-top:6px;">Auditoría en Vivo: cambia arriba a <code>rol_admin</code>, filtra por tabla u operación e inspecciona los JSON <code>OLD</code>/<code>NEW</code> de los triggers.</p>
+                    </div>
+
+                    <div class="panel" style="border-top:3px solid var(--red);">
+                        <span class="badge badge-red mono" style="margin-bottom:8px;">Paso 5 &middot; Bloque 5</span>
+                        <p style="font-size:13px;font-weight:700;">Manuel Alfredo Gonzalez Castaño</p>
+                        <p style="font-size:12px;color:var(--muted);margin-top:6px;">Microservicios y DCL <code>403</code>: verifica puertos <code>:8001</code>/<code>:8002</code>, intenta eliminar bajo <code>rol_operador</code> (modal rojo <code>403</code>) y cambia a <code>rol_admin</code>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Barra inferior fija de navegación -->
+    <footer class="bottom-nav">
+        <div class="bottom-nav-inner">
+            <button type="button" id="prev-slide-btn" class="btn">
+                <i data-lucide="arrow-left" style="width:14px;height:14px;"></i>
+                <span>Anterior</span>
+            </button>
+
+            <div class="slide-dots" id="slide-dots">
+                <button type="button" data-goto="1" class="dot-btn active mono">01 Portada</button>
+                <button type="button" data-goto="2" class="dot-btn mono">02 CU-01</button>
+                <button type="button" data-goto="3" class="dot-btn mono">03 MERE</button>
+                <button type="button" data-goto="4" class="dot-btn mono">04 Docker</button>
+                <button type="button" data-goto="5" class="dot-btn mono">05 PL/pgSQL</button>
+                <button type="button" data-goto="6" class="dot-btn mono">06 ACID</button>
+                <button type="button" data-goto="7" class="dot-btn mono">07 DCL</button>
+                <button type="button" data-goto="8" class="dot-btn mono">08 Demo</button>
+            </div>
+
+            <button type="button" id="next-slide-btn" class="btn btn-cyan">
+                <span>Siguiente</span>
+                <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        const SPEAKER_SCRIPTS = {
+            1: {
+                speaker: 'Brayan Steveen Sandoval Quiroz (Bloque 1 · 0:00–2:00 — Apertura)',
+                text: 'Buenos días profesor. Presentamos nuestro Proyecto Final de Bases de Datos — TechCore Store, un sistema comercial, de inventario y ventas de tecnología sobre PostgreSQL 16, dos microservicios FastAPI con psycopg v3 (sin ORM), un Frontend SPA y Docker Compose. Aquí en la portada vemos nuestros 5 bloques de 2 minutos. Ahora pulso "Siguiente" para mostrar el contexto y continuar con el modelo MERE (03 MERE) y Docker (04 Docker).'
+            },
+            2: {
+                speaker: 'Yoinner Jesus Gandara Garcia (Bloque 2 · 2:00–4:00 — Caso de Uso CU-01)',
+                text: 'Nuestro caso de uso principal CU-01 cubre una venta completa en lote: desde el registro de inventario y clientes hasta el descuento transaccional de stock y el registro en auditoria_logs, separando rol_admin y rol_operador desde el motor. Si desea ver la ficha formal completa del CU-01, podemos pulsar el botón "Ver CU-01 en Requisitos", o pasar directo a la lámina 06 ACID para el control transaccional en vivo.'
+            },
+            3: {
+                speaker: 'Brayan Steveen Sandoval Quiroz (Bloque 1 — Modelo MERE e Índices)',
+                text: 'En esta vista mostramos el MERE con 7 tablas relacionales. Destaco detalle_pedidos para resolver la relación N:M entre pedidos y productos, las dos especializaciones disjuntas totales (clientes NATURAL o JURIDICA y usuarios rol_admin o rol_operador), restricciones CHECK/UNIQUE y 8 índices secundarios. Pueden acercar el diagrama con los botones "+", "-" o "Reset", y pulsar "Ver Índices SQL" o "Ver Mapa de Código y Requisitos" arriba para ver el DDL real.'
+            },
+            4: {
+                speaker: 'Brayan Steveen Sandoval Quiroz (Bloque 1 — Docker y CRUD de Inventario)',
+                text: 'Todo corre 100% portable en local con docker-compose.yml dentro de la red techcore_net: postgres_db (carga init.sql con healthcheck), microservicio 8001, microservicio 8002 y frontend Nginx en 3000; además DB_SSLMODE permite alternar entre Docker offline y Supabase. Para probar el CRUD en vivo, pulso el botón verde "Ir a App (:3000)" (o "Abrir Sistema TechCore en Vivo"), entro a la pestaña "Inventario y Categorías", creo el producto PROD-DEMO y edito su stock.'
+            },
+            5: {
+                speaker: 'Juan Camilo Diaz Granados Amaya (Bloque 3 · 4:00–6:00) y Ana Catalina Torres Oñate (Bloque 4 · 6:00–8:00)',
+                text: '[Bloque 3 — Juan Camilo Diaz Granados Amaya (4:00–6:00)]: Toda la lógica de negocio vive en PostgreSQL. Recorro aquí arriba las pestañas "fn_calcular_descuento (Escalar)", "fn_reporte_ventas (Tabla)", "fn_promedio_ponderado (Agregada)", "proc_cancelar_pedido (CALL)" y "Vistas vw_* (JOIN)". Para demostrarlo en vivo pulso "Abrir Sistema TechCore en Vivo", muestro en "Dashboard y Reportes" el KPI ponderado y el filtro de fechas, y en "Punto de Venta (POS)" presiono "Cancelar" en un pedido para ejecutar CALL proc_cancelar_pedido y devolver stock.\n\n[Bloque 4 — Ana Catalina Torres Oñate (6:00–8:00)]: Ahora hago clic en la primera pestaña "fn_auditar_cambios (Trigger)" para mostrar el trigger con SECURITY DEFINER que guarda BEFORE/AFTER en JSONB sobre 5 tablas y oculta password_hash en usuarios. En vivo pulso "Abrir Sistema TechCore en Vivo", cambio el selector superior a rol_admin, entro a "Auditoría en Vivo", filtro por tabla u operación y abro el detalle JSON generado automáticamente por los cambios del equipo.'
+            },
+            6: {
+                speaker: 'Yoinner Jesus Gandara Garcia (Bloque 2 — Control Transaccional ACID)',
+                text: 'En operaciones_service.py abrimos la transacción manualmente con BEGIN;, bloqueamos cada producto con SELECT ... FOR UPDATE, descontamos el 1er ítem y validamos el 2do. Si el 2do no tiene stock, el bloque except ejecuta ROLLBACK; completo y el 1er producto queda intacto. Para la prueba real pulso el botón verde "Probar Demo ROLLBACK", entro a "Punto de Venta (POS)", presiono "Simular fallo en 2do ítem para probar ROLLBACK" y luego confirmo un lote válido (COMMIT). También tenemos el simulador visual en "Ver Mapa de Código y Requisitos" -> Tarjeta 07 ("Ver flujo con Fallo en 2do ítem (ROLLBACK)" / "Ver flujo con Stock OK (COMMIT)").'
+            },
+            7: {
+                speaker: 'Manuel Alfredo Gonzalez Castaño (Bloque 5 · 8:00–10:00 — Microservicios 8001/8002 y DCL)',
+                text: 'Nuestros dos microservicios (ms-usuarios-seguridad en 8001 y ms-operaciones-reportes en 8002) aplican la seguridad directamente en PostgreSQL mediante GRANT/REVOKE, el header X-DB-Role, SET ROLE por sesión y captura de InsufficientPrivilege hacia HTTP 403. Para probarlo en vivo pulso el botón ámbar "Probar Bloqueo 403", muestro abajo en el menú izquierdo los estados :8001 Usuarios y :8002 Operaciones, verifico arriba estar en rol_operador, intento presionar "Eliminar" en Inventario o abrir "Auditoría en Vivo" para disparar el modal rojo HTTP 403, y lo desbloqueo con el botón "Cambiar a rol_admin".'
+            },
+            8: {
+                speaker: 'Manuel Alfredo Gonzalez Castaño y Equipo (Cierre — Ruta de Demo en Vivo)',
+                text: 'Para concluir sin perder tiempo, aquí está la secuencia exacta de nuestros 5 bloques en la aplicación real: 1) Brayan: CRUD en Inventario (PROD-DEMO); 2) Yoinner: POS con "Simular fallo en 2do ítem para probar ROLLBACK" y luego COMMIT; 3) Juan Camilo: Dashboard con vistas/funciones y botón "Cancelar" (CALL proc_cancelar_pedido); 4) Ana Catalina: Auditoría en Vivo con filtros y JSON de triggers; y 5) Manuel: bloqueo 403 en rol_operador y acceso completo con rol_admin. Pulsamos el botón verde "Iniciar Demo en ./index.html" para ejecutarla, o "Mapa de Código" para mostrar el repositorio.'
+            }
+        };
+
+        let currentSlide = 1;
+        const TOTAL_SLIDES = 8;
+        let mereZoom = 1;
+
+        function copyTextSafe(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(text);
+            }
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); } catch {}
+            ta.remove();
+            return Promise.resolve();
+        }
+
+        function renderCodeSnapshots() {
+            document.querySelectorAll('.code-slot').forEach((slot) => {
+                const raw = slot.querySelector('script[type="text/plain"]');
+                if (!raw) return;
+
+                const codeText = raw.textContent.replace(/^\n+|\n+$/g, '');
+                const file = slot.dataset.file || '';
+                const linesLabel = slot.dataset.lines || '';
+                const startLine = Number(slot.dataset.start || 1);
+                const lang = (slot.dataset.lang || 'sql').toLowerCase();
+
+                const count = codeText.split('\n').length;
+                const lineNumbers = Array.from({ length: count }, (_, i) => String(startLine + i)).join('\n');
+
+                let highlighted = '';
+                try {
+                    highlighted = hljs.highlight(codeText, { language: lang }).value;
+                } catch {
+                    highlighted = codeText.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+                }
+
+                const win = document.createElement('div');
+                win.className = 'ide-window';
+                win.innerHTML = `
+                    <div class="ide-header">
+                        <div class="ide-title-wrap">
+                            <span class="ide-dots">
+                                <span class="ide-dot" style="background:rgba(239,68,68,0.85);"></span>
+                                <span class="ide-dot" style="background:rgba(245,158,11,0.85);"></span>
+                                <span class="ide-dot" style="background:rgba(16,185,129,0.85);"></span>
+                            </span>
+                            <span class="mono js-file" style="font-size:12px;color:#F4F4F5;"></span>
+                            <span class="mono js-lines" style="font-size:11px;color:#A1A1AA;"></span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span class="mono js-lang" style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;background:#27272A;color:#38BDF8;"></span>
+                            <button type="button" class="btn copy-btn" style="padding:4px 9px;font-size:11px;background:#27272A;">
+                                <i data-lucide="copy" style="width:12px;height:12px;"></i>
+                                <span>Copiar</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ide-body">
+                        <div class="ide-gutter mono"></div>
+                        <pre class="ide-pre"><code class="hljs language-${lang}"></code></pre>
+                    </div>
+                `;
+
+                win.querySelector('.js-file').textContent = file;
+                win.querySelector('.js-lines').textContent = linesLabel ? `· ${linesLabel}` : '';
+                win.querySelector('.js-lang').textContent = lang.toUpperCase();
+                win.querySelector('.ide-gutter').textContent = lineNumbers;
+                win.querySelector('code.hljs').innerHTML = highlighted;
+
+                const copyBtn = win.querySelector('.copy-btn');
+                copyBtn.addEventListener('click', async () => {
+                    await copyTextSafe(codeText);
+                    copyBtn.innerHTML = '<i data-lucide="check" style="width:12px;height:12px;color:#10B981;"></i><span style="color:#10B981;">Copiado</span>';
+                    lucide.createIcons({ attrs: { 'stroke-width': '1.75' } });
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i data-lucide="copy" style="width:12px;height:12px;"></i><span>Copiar</span>';
+                        lucide.createIcons({ attrs: { 'stroke-width': '1.75' } });
+                    }, 1600);
+                });
+
+                slot.innerHTML = '';
+                slot.appendChild(win);
+            });
+        }
+
+        async function renderVisibleMermaid(slideEl) {
+            const targets = slideEl.querySelectorAll('.mermaid-target[data-mermaid-rendered="false"]');
+            for (const target of targets) {
+                const src = target.querySelector('script[type="text/plain"]');
+                if (!src) continue;
+                const code = src.textContent.trim();
+                try {
+                    const { svg } = await mermaid.render(`svg-${target.id}-${Date.now()}`, code);
+                    target.innerHTML = svg;
+                    target.dataset.mermaidRendered = 'true';
+                } catch (err) {
+                    target.textContent = `Error renderizando diagrama Mermaid: ${err.message}`;
+                }
+            }
+        }
+
+        function updateScriptDrawer() {
+            const info = SPEAKER_SCRIPTS[currentSlide];
+            const sp = document.getElementById('script-speaker');
+            const tx = document.getElementById('script-text');
+            if (info && sp && tx) {
+                sp.innerHTML = `<i data-lucide="user-check" style="width:14px;height:14px;"></i><span>${info.speaker}</span>`;
+                tx.textContent = info.text;
+                lucide.createIcons({ attrs: { 'stroke-width': '1.75' } });
+            }
+        }
+
+        async function showSlide(num) {
+            if (num < 1) num = 1;
+            if (num > TOTAL_SLIDES) num = TOTAL_SLIDES;
+            currentSlide = num;
+
+            document.querySelectorAll('.slide').forEach((s) => {
+                s.classList.toggle('active', Number(s.dataset.slide) === currentSlide);
+            });
+
+            document.querySelectorAll('.dot-btn').forEach((b) => {
+                b.classList.toggle('active', Number(b.dataset.goto) === currentSlide);
+            });
+
+            const counter = document.getElementById('slide-counter');
+            if (counter) counter.textContent = `${String(currentSlide).padStart(2, '0')} / 0${TOTAL_SLIDES}`;
+
+            const fill = document.getElementById('progress-fill');
+            if (fill) fill.style.width = `${(currentSlide / TOTAL_SLIDES) * 100}%`;
+
+            updateScriptDrawer();
+
+            const activeSlideEl = document.querySelector(`.slide[data-slide="${currentSlide}"]`);
+            if (activeSlideEl) {
+                await renderVisibleMermaid(activeSlideEl);
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initInnerTabs() {
+            document.querySelectorAll('.inner-tab-group').forEach((grp) => {
+                const btns = grp.querySelectorAll('.inner-tab-btn');
+                const panels = grp.querySelectorAll('.inner-panel');
+
+                function activate(id) {
+                    btns.forEach((b) => b.classList.toggle('active', b.dataset.tabBtn === id));
+                    panels.forEach((p) => p.classList.toggle('active', p.dataset.tabPanel === id));
+                }
+
+                btns.forEach((b) => b.addEventListener('click', () => activate(b.dataset.tabBtn)));
+            });
+        }
+
+        function initZoomControls() {
+            const stage = document.getElementById('mere-zoom-stage');
+            const val = document.getElementById('mere-zoom-val');
+            document.querySelectorAll('[data-zoom]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const act = btn.dataset.zoom;
+                    if (act === 'in') mereZoom = Math.min(2, +(mereZoom + 0.15).toFixed(2));
+                    if (act === 'out') mereZoom = Math.max(0.6, +(mereZoom - 0.15).toFixed(2));
+                    if (act === 'reset') mereZoom = 1;
+                    if (stage) stage.style.transform = `scale(${mereZoom})`;
+                    if (val) val.textContent = `${Math.round(mereZoom * 100)}%`;
+                });
+            });
+        }
+
+        function toggleScriptDrawer() {
+            document.getElementById('script-drawer')?.classList.toggle('open');
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'dark',
+                themeVariables: {
+                    primaryColor: '#18181B',
+                    primaryTextColor: '#F4F4F5',
+                    primaryBorderColor: '#38BDF8',
+                    lineColor: '#71717A',
+                    secondaryColor: '#111318',
+                    tertiaryColor: '#161B22',
+                },
+            });
+
+            renderCodeSnapshots();
+            initInnerTabs();
+            initZoomControls();
+
+            document.getElementById('prev-slide-btn').addEventListener('click', () => showSlide(currentSlide - 1));
+            document.getElementById('next-slide-btn').addEventListener('click', () => showSlide(currentSlide + 1));
+            document.getElementById('toggle-script-btn').addEventListener('click', toggleScriptDrawer);
+
+            document.querySelectorAll('.dot-btn').forEach((btn) => {
+                btn.addEventListener('click', () => showSlide(Number(btn.dataset.goto)));
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+                if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+                    e.preventDefault();
+                    showSlide(currentSlide + 1);
+                } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                    e.preventDefault();
+                    showSlide(currentSlide - 1);
+                } else if (e.key === 'g' || e.key === 'G') {
+                    e.preventDefault();
+                    toggleScriptDrawer();
+                }
+            });
+
+            lucide.createIcons({ attrs: { 'stroke-width': '1.75' } });
+            await showSlide(1);
+        });
+    </script>
+</body>
+</html>

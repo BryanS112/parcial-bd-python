@@ -1,0 +1,78 @@
+services:
+  postgres_db:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: techcore_db
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d techcore_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - techcore_net
+
+  ms-usuarios-seguridad:
+    build:
+      context: ./ms-usuarios-seguridad
+      dockerfile: Dockerfile
+    container_name: ms-usuarios-seguridad
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      # Conexión interna en la red de Docker
+      DATABASE_URL: postgresql://postgres:postgres@postgres_db:5432/techcore_db
+      DB_SSLMODE: disable
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    networks:
+      - techcore_net
+
+  ms-operaciones-reportes:
+    build:
+      context: ./ms-operaciones-reportes
+      dockerfile: Dockerfile
+    container_name: ms-operaciones-reportes
+    restart: unless-stopped
+    ports:
+      - "8002:8002"
+    environment:
+      # Conexión interna en la red de Docker
+      DATABASE_URL: postgresql://postgres:postgres@postgres_db:5432/techcore_db
+      DB_SSLMODE: disable
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    networks:
+      - techcore_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: techcore_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - ms-usuarios-seguridad
+      - ms-operaciones-reportes
+    networks:
+      - techcore_net
+
+volumes:
+  postgres_data:
+
+networks:
+  techcore_net:
+    driver: bridge
